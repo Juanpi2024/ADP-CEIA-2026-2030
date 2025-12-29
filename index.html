@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Panel de Gestión - Convenio de Desempeño ADP - Escuela Juanita Zúñiga CEIA">
+    <title>Panel de Gestión ADP - CEIA 2026-2030</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <!-- Header Principal -->
+    <header class="main-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                        <path d="M2 17l10 5 10-5" />
+                        <path d="M2 12l10 5 10-5" />
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <h1>Panel de Gestión ADP</h1>
+                    <span class="subtitle">Convenio de Desempeño Director - CEIA 2026-2030</span>
+                </div>
+            </div>
+            <div class="header-info">
+                <div class="info-badge">
+                    <span class="badge-label">Establecimiento</span>
+                    <span class="badge-value">Escuela Juanita Zúñiga CEIA</span>
+                </div>
+                <div class="info-badge">
+                    <span class="badge-label">Director</span>
+                    <span class="badge-value">Juan José Araya Chandía</span>
+                </div>
+                <div class="year-selector">
+                    <select id="yearSelect">
+                        <option value="2026" selected>2026</option>
+                        <option value="2027">2027</option>
+                        <option value="2028">2028</option>
+                        <option value="2029">2029</option>
+                        <option value="2030">2030</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navegación de Pestañas -->
+    <nav class="tab-navigation">
+        <div class="tab-container">
+            <button class="tab-btn active" data-tab="metas">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 11l3 3L22 4" />
+                    <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                </svg>
+                <span>Metas de Gestión</span>
+            </button>
+            <button class="tab-btn" data-tab="calendario">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                    <line x1="16" y1="2" x2="16" y2="6" />
+                    <line x1="8" y1="2" x2="8" y2="6" />
+                    <line x1="3" y1="10" x2="21" y2="10" />
+                </svg>
+                <span>Calendario de Hitos</span>
+            </button>
+            <button class="tab-btn" data-tab="dashboard">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 20V10" />
+                    <path d="M12 20V4" />
+                    <path d="M6 20v-6" />
+                </svg>
+                <span>Dashboard Ejecutivo</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal -->
+    <main class="main-content">
+        <!-- Pestaña: Metas de Gestión -->
+        <section id="metas" class="tab-content active">
+            <!-- Filtros -->
+            <div class="filters-bar glass-card">
+                <div class="filter-group">
+                    <label>Dimensión:</label>
+                    <select id="filterDimension">
+                        <option value="all">Todas las Dimensiones</option>
+                        <option value="pedagogica">Gestión Pedagógica</option>
+                        <option value="recursos">Gestión de Recursos</option>
+                        <option value="liderazgo">Liderazgo</option>
+                        <option value="convivencia">Convivencia Escolar</option>
+                        <option value="resultados">Resultados</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Estado:</label>
+                    <select id="filterEstado">
+                        <option value="all">Todos los Estados</option>
+                        <option value="pendiente">Pendiente</option>
+                        <option value="progreso">En Progreso</option>
+                        <option value="lograda">Lograda</option>
+                        <option value="no-lograda">No Lograda</option>
+                    </select>
+                </div>
+                <button class="btn-primary" id="btnAddMeta">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    Nueva Meta
+                </button>
+            </div>
+
+            <!-- Resumen de Dimensiones -->
+            <div class="dimension-summary">
+                <div class="dimension-card glass-card" data-dimension="pedagogica">
+                    <div class="dimension-icon pedagogica">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                        </svg>
+                    </div>
+                    <div class="dimension-info">
+                        <h3>Gestión Pedagógica</h3>
+                        <div class="dimension-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span class="progress-text">0%</span>
+                        </div>
+                        <span class="dimension-weight">Peso: 20%</span>
+                    </div>
+                </div>
+                <div class="dimension-card glass-card" data-dimension="recursos">
+                    <div class="dimension-icon recursos">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                    </div>
+                    <div class="dimension-info">
+                        <h3>Gestión de Recursos</h3>
+                        <div class="dimension-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span class="progress-text">0%</span>
+                        </div>
+                        <span class="dimension-weight">Peso: 15%</span>
+                    </div>
+                </div>
+                <div class="dimension-card glass-card" data-dimension="liderazgo">
+                    <div class="dimension-icon liderazgo">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon
+                                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                    </div>
+                    <div class="dimension-info">
+                        <h3>Liderazgo</h3>
+                        <div class="dimension-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span class="progress-text">0%</span>
+                        </div>
+                        <span class="dimension-weight">Peso: 20%</span>
+                    </div>
+                </div>
+                <div class="dimension-card glass-card" data-dimension="convivencia">
+                    <div class="dimension-icon convivencia">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path
+                                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                        </svg>
+                    </div>
+                    <div class="dimension-info">
+                        <h3>Convivencia Escolar</h3>
+                        <div class="dimension-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span class="progress-text">0%</span>
+                        </div>
+                        <span class="dimension-weight">Peso: 20%</span>
+                    </div>
+                </div>
+                <div class="dimension-card glass-card" data-dimension="resultados">
+                    <div class="dimension-icon resultados">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="20" x2="18" y2="10" />
+                            <line x1="12" y1="20" x2="12" y2="4" />
+                            <line x1="6" y1="20" x2="6" y2="14" />
+                        </svg>
+                    </div>
+                    <div class="dimension-info">
+                        <h3>Resultados</h3>
+                        <div class="dimension-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span class="progress-text">0%</span>
+                        </div>
+                        <span class="dimension-weight">Peso: 25%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lista de Metas -->
+            <div class="metas-list" id="metasList">
+                <!-- Las metas se cargarán dinámicamente -->
+            </div>
+        </section>
+
+        <!-- Pestaña: Calendario de Hitos -->
+        <section id="calendario" class="tab-content">
+            <div class="calendar-header glass-card">
+                <button class="nav-btn" id="prevMonth">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6" />
+                    </svg>
+                </button>
+                <h2 id="currentMonth">Enero 2026</h2>
+                <button class="nav-btn" id="nextMonth">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6" />
+                    </svg>
+                </button>
+                <button class="btn-primary" id="btnAddHito">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    Nuevo Hito
+                </button>
+            </div>
+
+            <div class="calendar-legend glass-card">
+                <div class="legend-item">
+                    <span class="legend-color informe"></span>
+                    <span>Informes</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color evaluacion"></span>
+                    <span>Evaluaciones</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color reunion"></span>
+                    <span>Reuniones</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color entrega"></span>
+                    <span>Entregas</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color capacitacion"></span>
+                    <span>Capacitaciones</span>
+                </div>
+            </div>
+
+            <div class="calendar-grid glass-card">
+                <div class="calendar-weekdays">
+                    <span>Dom</span>
+                    <span>Lun</span>
+                    <span>Mar</span>
+                    <span>Mié</span>
+                    <span>Jue</span>
+                    <span>Vie</span>
+                    <span>Sáb</span>
+                </div>
+                <div class="calendar-days" id="calendarDays">
+                    <!-- Los días se generarán dinámicamente -->
+                </div>
+            </div>
+
+            <div class="upcoming-events glass-card">
+                <h3>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                    Próximos Hitos
+                </h3>
+                <div class="events-list" id="upcomingEvents">
+                    <!-- Los eventos se cargarán dinámicamente -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Pestaña: Dashboard Ejecutivo -->
+        <section id="dashboard" class="tab-content">
+            <!-- KPIs Principales -->
+            <div class="kpi-grid">
+                <div class="kpi-card glass-card">
+                    <div class="kpi-icon cumplimiento">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                            <polyline points="22 4 12 14.01 9 11.01" />
+                        </svg>
+                    </div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">Cumplimiento General</span>
+                        <span class="kpi-value" id="kpiCumplimiento">0%</span>
+                        <span class="kpi-detail">Meta mínima: 60%</span>
+                    </div>
+                </div>
+                <div class="kpi-card glass-card">
+                    <div class="kpi-icon metas-logradas">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 11 12 14 22 4" />
+                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+                        </svg>
+                    </div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">Metas Logradas</span>
+                        <span class="kpi-value" id="kpiLogradas">0/0</span>
+                        <span class="kpi-detail">Del total de metas</span>
+                    </div>
+                </div>
+                <div class="kpi-card glass-card">
+                    <div class="kpi-icon en-progreso">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                    </div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">En Progreso</span>
+                        <span class="kpi-value" id="kpiProgreso">0</span>
+                        <span class="kpi-detail">Metas activas</span>
+                    </div>
+                </div>
+                <div class="kpi-card glass-card warning">
+                    <div class="kpi-icon alertas">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path
+                                d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                            <line x1="12" y1="9" x2="12" y2="13" />
+                            <line x1="12" y1="17" x2="12.01" y2="17" />
+                        </svg>
+                    </div>
+                    <div class="kpi-info">
+                        <span class="kpi-label">Alertas</span>
+                        <span class="kpi-value" id="kpiAlertas">0</span>
+                        <span class="kpi-detail">Vencimientos próximos</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráficos -->
+            <div class="charts-grid">
+                <div class="chart-card glass-card">
+                    <h3>Cumplimiento por Dimensión</h3>
+                    <div class="chart-container">
+                        <canvas id="chartDimensiones"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card glass-card">
+                    <h3>Distribución de Estados</h3>
+                    <div class="chart-container">
+                        <canvas id="chartEstados"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Evolución Trimestral -->
+            <div class="evolution-card glass-card">
+                <h3>Evolución del Cumplimiento</h3>
+                <div class="chart-container-wide">
+                    <canvas id="chartEvolucion"></canvas>
+                </div>
+            </div>
+
+            <!-- Barra de Acciones de Reportes -->
+            <div class="reports-bar glass-card">
+                <h3>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                        <line x1="16" y1="13" x2="8" y2="13" />
+                        <line x1="16" y1="17" x2="8" y2="17" />
+                        <polyline points="10 9 9 9 8 9" />
+                    </svg>
+                    Exportar Reportes de Seguimiento
+                </h3>
+                <div class="reports-actions">
+                    <button class="btn-report" id="btnExportPDF">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                            <path d="M12 18v-6" />
+                            <path d="M9 15l3 3 3-3" />
+                        </svg>
+                        Descargar Reporte PDF
+                    </button>
+                    <button class="btn-report" id="btnExportExcel">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                            <rect x="8" y="12" width="8" height="6" />
+                        </svg>
+                        Exportar a Excel
+                    </button>
+                    <button class="btn-report" id="btnPrintReport">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 6 2 18 2 18 9" />
+                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                            <rect x="6" y="14" width="12" height="8" />
+                        </svg>
+                        Imprimir Reporte
+                    </button>
+                </div>
+            </div>
+
+            <!-- Alertas de Vencimiento -->
+            <div class="alerts-section glass-card">
+                <h3>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                        <line x1="12" y1="9" x2="12" y2="13" />
+                        <line x1="12" y1="17" x2="12.01" y2="17" />
+                    </svg>
+                    Alertas y Vencimientos Próximos
+                </h3>
+                <div class="alerts-list" id="alertsList">
+                    <!-- Las alertas se cargarán dinámicamente -->
+                </div>
+            </div>
+
+            <!-- Tabla Resumen -->
+            <div class="summary-table glass-card">
+                <h3>Resumen por Dimensión</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Dimensión</th>
+                            <th>Peso</th>
+                            <th>Metas</th>
+                            <th>Logradas</th>
+                            <th>En Progreso</th>
+                            <th>Avance</th>
+                        </tr>
+                    </thead>
+                    <tbody id="summaryTableBody">
+                        <!-- Los datos se cargarán dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal para Metas -->
+    <div class="modal-overlay" id="modalMeta">
+        <div class="modal glass-card">
+            <div class="modal-header">
+                <h2 id="modalMetaTitle">Nueva Meta</h2>
+                <button class="modal-close" id="closeModalMeta">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+            <form id="formMeta" class="modal-form">
+                <input type="hidden" id="metaId">
+                <div class="form-group">
+                    <label for="metaDimension">Dimensión</label>
+                    <select id="metaDimension" required>
+                        <option value="">Seleccionar dimensión...</option>
+                        <option value="pedagogica">Gestión Pedagógica</option>
+                        <option value="recursos">Gestión de Recursos</option>
+                        <option value="liderazgo">Liderazgo</option>
+                        <option value="convivencia">Convivencia Escolar</option>
+                        <option value="resultados">Resultados</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="metaNombre">Nombre de la Meta</label>
+                    <input type="text" id="metaNombre" placeholder="Ingrese el nombre de la meta..." required>
+                </div>
+                <div class="form-group">
+                    <label for="metaIndicador">Indicador</label>
+                    <textarea id="metaIndicador" placeholder="Describa el indicador de cumplimiento..."
+                        required></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="metaPonderacion">Ponderación (%)</label>
+                        <input type="number" id="metaPonderacion" min="0" max="100" step="0.5" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="metaAvance">Avance (%)</label>
+                        <input type="number" id="metaAvance" min="0" max="100" step="1" value="0">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="metaFecha">Fecha de Cumplimiento</label>
+                        <input type="date" id="metaFecha" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="metaEstado">Estado</label>
+                        <select id="metaEstado" required>
+                            <option value="pendiente">Pendiente</option>
+                            <option value="progreso">En Progreso</option>
+                            <option value="lograda">Lograda</option>
+                            <option value="no-lograda">No Lograda</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="metaVerificacion">Medios de Verificación</label>
+                    <textarea id="metaVerificacion" placeholder="Describa los medios de verificación..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancelMeta">Cancelar</button>
+                    <button type="submit" class="btn-primary">Guardar Meta</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para Hitos -->
+    <div class="modal-overlay" id="modalHito">
+        <div class="modal glass-card">
+            <div class="modal-header">
+                <h2 id="modalHitoTitle">Nuevo Hito</h2>
+                <button class="modal-close" id="closeModalHito">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+            <form id="formHito" class="modal-form">
+                <input type="hidden" id="hitoId">
+                <div class="form-group">
+                    <label for="hitoTitulo">Título del Hito</label>
+                    <input type="text" id="hitoTitulo" placeholder="Ingrese el título..." required>
+                </div>
+                <div class="form-group">
+                    <label for="hitoDescripcion">Descripción</label>
+                    <textarea id="hitoDescripcion" placeholder="Describa el hito..."></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="hitoFecha">Fecha</label>
+                        <input type="date" id="hitoFecha" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hitoCategoria">Categoría</label>
+                        <select id="hitoCategoria" required>
+                            <option value="informe">Informe</option>
+                            <option value="evaluacion">Evaluación</option>
+                            <option value="reunion">Reunión</option>
+                            <option value="entrega">Entrega</option>
+                            <option value="capacitacion">Capacitación</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="hitoResponsable">Responsable</label>
+                    <input type="text" id="hitoResponsable" placeholder="Ingrese el responsable...">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancelHito">Cancelar</button>
+                    <button type="submit" class="btn-primary">Guardar Hito</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Detalle de Meta -->
+    <div class="modal-overlay" id="modalDetalle">
+        <div class="modal modal-large glass-card">
+            <div class="modal-header">
+                <h2>Detalle de Meta</h2>
+                <button class="modal-close" id="closeModalDetalle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body" id="detalleContent">
+                <!-- El contenido se cargará dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <p>
+                <strong>Convenio de Desempeño</strong> - Ley 20.501 |
+                Ilustre Municipalidad de Parral - DAEM
+            </p>
+            <p class="footer-signature">
+                App creada por <strong>Juan P. Ramírez</strong> - Product Manager
+            </p>
+        </div>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
