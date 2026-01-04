@@ -98,8 +98,8 @@ function setupEventListeners() {
         renderMetas();
     });
 
-    // Botones de agregar
-    document.getElementById('btnAddMeta').addEventListener('click', () => openMetaModal());
+
+    // Botón de agregar hito
     document.getElementById('btnAddHito').addEventListener('click', () => openHitoModal());
 
     // Navegación del calendario
@@ -213,13 +213,6 @@ function renderMetas() {
             openMetaModal(btn.dataset.id);
         });
     });
-
-    container.querySelectorAll('.action-btn.delete').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            deleteMeta(btn.dataset.id);
-        });
-    });
 }
 
 function filterMetas() {
@@ -272,12 +265,6 @@ function createMetaCard(meta) {
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
                             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                        </svg>
-                    </button>
-                    <button class="action-btn delete" data-id="${meta.id}" title="Eliminar">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="3 6 5 6 21 6"/>
-                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
                         </svg>
                     </button>
                 </div>
@@ -1363,4 +1350,1050 @@ document.head.appendChild(notificationStyles);
 document.addEventListener('DOMContentLoaded', () => {
     // Esperar un momento para asegurar que los elementos existen
     setTimeout(setupReportListeners, 100);
+    // Inicializar Calendario CEIA
+    setTimeout(initCalendarioCEIA, 150);
 });
+
+// ============================================
+// Calendario CEIA
+// ============================================
+
+// Estado del filtro CEIA
+let filtrosCEIA = {
+    tipo: 'all',
+    mes: 'all',
+    soloEvidencias: false
+};
+
+function initCalendarioCEIA() {
+    // Setup event listeners para filtros CEIA
+    const filterTipo = document.getElementById('filterTipoCEIA');
+    const filterMes = document.getElementById('filterMesCEIA');
+    const filterEvidencias = document.getElementById('filterSoloEvidencias');
+    const btnSincronizar = document.getElementById('btnSincronizarCEIA');
+
+    if (filterTipo) {
+        filterTipo.addEventListener('change', (e) => {
+            filtrosCEIA.tipo = e.target.value;
+            renderCalendarioCEIA();
+        });
+    }
+
+    if (filterMes) {
+        filterMes.addEventListener('change', (e) => {
+            filtrosCEIA.mes = e.target.value;
+            renderCalendarioCEIA();
+        });
+    }
+
+    if (filterEvidencias) {
+        filterEvidencias.addEventListener('change', (e) => {
+            filtrosCEIA.soloEvidencias = e.target.checked;
+            renderCalendarioCEIA();
+        });
+    }
+
+    if (btnSincronizar) {
+        btnSincronizar.addEventListener('click', sincronizarConHitos);
+    }
+
+    // Renderizar inicialmente
+    renderCalendarioCEIA();
+}
+
+function renderCalendarioCEIA() {
+    const container = document.getElementById('ceiaList');
+    if (!container) return;
+
+    // Filtrar actividades
+    const actividadesFiltradas = CALENDARIO_CEIA.filter(act => {
+        // Filtro por tipo
+        if (filtrosCEIA.tipo !== 'all' && act.tipo !== filtrosCEIA.tipo) {
+            return false;
+        }
+
+        // Filtro por mes
+        if (filtrosCEIA.mes !== 'all') {
+            const mes = parseInt(act.fecha.split('-')[1]);
+            if (mes !== parseInt(filtrosCEIA.mes)) {
+                return false;
+            }
+        }
+
+        // Filtro solo evidencias
+        if (filtrosCEIA.soloEvidencias && !act.esEvidenciaADP) {
+            return false;
+        }
+
+        return true;
+    });
+
+    // Actualizar contadores
+    updateCEIAStats(actividadesFiltradas);
+
+    // Agrupar por mes
+    const actividadesPorMes = agruparPorMes(actividadesFiltradas);
+
+    if (Object.keys(actividadesPorMes).length === 0) {
+        container.innerHTML = `
+            <div class="empty-state glass-card">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                <h3>No hay actividades para mostrar</h3>
+                <p>Ajusta los filtros para ver más actividades.</p>
+            </div>
+        `;
+        return;
+    }
+
+    let html = '';
+    const nombresMeses = ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    const diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+
+    Object.keys(actividadesPorMes).sort((a, b) => a - b).forEach(mes => {
+        const actividades = actividadesPorMes[mes];
+        const evidenciasEnMes = actividades.filter(a => a.esEvidenciaADP).length;
+
+        html += `
+            <div class="ceia-month-group">
+                <div class="ceia-month-header">
+                    <h3>
+                        📅 ${nombresMeses[parseInt(mes)]} 2026
+                        <span class="month-count">(${actividades.length} actividades${evidenciasEnMes > 0 ? `, ${evidenciasEnMes} evidencias` : ''})</span>
+                    </h3>
+                </div>
+                <div class="ceia-month-activities">
+        `;
+
+        actividades.forEach(act => {
+            const fecha = new Date(act.fecha + 'T12:00:00');
+            const dia = fecha.getDate();
+            const diaSemana = diasSemana[fecha.getDay()];
+            const categoria = CATEGORIAS_CEIA[act.tipo] || { nombre: act.tipo, icon: '📋' };
+
+            // Buscar el nombre de la meta relacionada
+            let nombreMeta = '';
+            if (act.metaRelacionada) {
+                const meta = METAS_INICIALES.find(m => m.id === act.metaRelacionada);
+                if (meta) {
+                    nombreMeta = meta.nombre;
+                }
+            }
+
+            html += `
+                <div class="ceia-activity ${act.tipo}">
+                    <div class="activity-date">
+                        <span class="day">${dia}</span>
+                        <span class="weekday">${diaSemana}</span>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">
+                            ${categoria.icon || ''} ${act.titulo}
+                            <span class="tipo-badge ${act.tipo}">${categoria.nombre}</span>
+                        </div>
+                        ${act.esEvidenciaADP && nombreMeta ? `
+                            <div class="activity-meta">
+                                📎 Meta ADP: <strong>${nombreMeta}</strong>
+                            </div>
+                        ` : ''}
+                    </div>
+                    ${act.esEvidenciaADP ? `
+                        <div class="activity-evidencia">
+                            <span class="evidencia-tag">
+                                <span class="star">⭐</span> Evidencia ADP
+                            </span>
+                            ${act.dimensionADP ? `
+                                <span class="dimension-tag ${act.dimensionADP}">
+                                    ${DIMENSIONES[act.dimensionADP]?.nombre || act.dimensionADP}
+                                </span>
+                            ` : ''}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        });
+
+        html += `
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+}
+
+function agruparPorMes(actividades) {
+    const grupos = {};
+    actividades.forEach(act => {
+        const mes = act.fecha.split('-')[1];
+        if (!grupos[mes]) {
+            grupos[mes] = [];
+        }
+        grupos[mes].push(act);
+    });
+
+    // Ordenar cada grupo por fecha
+    Object.keys(grupos).forEach(mes => {
+        grupos[mes].sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+    });
+
+    return grupos;
+}
+
+function updateCEIAStats(actividades) {
+    const totalEl = document.getElementById('totalActividades');
+    const evidenciasEl = document.getElementById('totalEvidencias');
+
+    if (totalEl) {
+        totalEl.textContent = actividades.length;
+    }
+
+    if (evidenciasEl) {
+        const evidencias = actividades.filter(a => a.esEvidenciaADP).length;
+        evidenciasEl.textContent = evidencias;
+    }
+}
+
+function sincronizarConHitos() {
+    // Agregar actividades CEIA al calendario de hitos (solo las que son evidencia ADP)
+    const evidenciasADP = CALENDARIO_CEIA.filter(act => act.esEvidenciaADP);
+    let agregados = 0;
+
+    evidenciasADP.forEach(act => {
+        // Verificar si ya existe un hito con la misma fecha y título similar
+        const existe = state.hitos.some(h =>
+            h.fecha === act.fecha &&
+            (h.titulo.includes(act.titulo) || act.titulo.includes(h.titulo) || h.id.startsWith('ceia-sync-'))
+        );
+
+        if (!existe) {
+            // Mapear tipo CEIA a categoría de hitos
+            const categoriaMap = {
+                'consejo': 'reunion',
+                'administrativo': 'informe',
+                'evaluacion': 'evaluacion',
+                'celebracion': 'informe',
+                'entrega': 'entrega'
+            };
+
+            state.hitos.push({
+                id: `ceia-sync-${act.id}`,
+                titulo: `[CEIA] ${act.titulo}`,
+                descripcion: `Actividad del calendario CEIA - Evidencia ADP para dimensión: ${DIMENSIONES[act.dimensionADP]?.nombre || act.dimensionADP}`,
+                fecha: act.fecha,
+                categoria: categoriaMap[act.tipo] || 'informe',
+                responsable: 'Director'
+            });
+            agregados++;
+        }
+    });
+
+    // Guardar cambios
+    saveData();
+
+    // Actualizar calendario de hitos
+    renderCalendar();
+    renderUpcomingEvents();
+
+    // Mostrar notificación
+    showSyncToast(agregados);
+}
+
+function showSyncToast(cantidad) {
+    // Remover toast anterior si existe
+    const existingToast = document.querySelector('.sync-toast');
+    if (existingToast) {
+        existingToast.remove();
+    }
+
+    const toast = document.createElement('div');
+    toast.className = 'sync-toast';
+    toast.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
+            <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        ${cantidad > 0
+            ? `✅ ${cantidad} actividades sincronizadas al calendario de hitos`
+            : '✓ El calendario ya está sincronizado'}
+    `;
+
+    document.body.appendChild(toast);
+
+    // Remover después de 3 segundos
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+
+// ============================================
+// Sistema de Reportes PDF
+// ============================================
+
+// Inicializar event listeners de reportes
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        const btnPDF = document.getElementById('btnExportPDF');
+        const btnExcel = document.getElementById('btnExportExcel');
+        const btnPrint = document.getElementById('btnPrintReport');
+
+        if (btnPDF) btnPDF.addEventListener('click', generarReportePDF);
+        if (btnExcel) btnExcel.addEventListener('click', exportarExcel);
+        if (btnPrint) btnPrint.addEventListener('click', imprimirReporte);
+    }, 200);
+});
+
+function generarReportePDF() {
+    const reportWindow = window.open('', '_blank');
+    const fechaActual = new Date().toLocaleDateString('es-CL', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+
+    // Calcular estadísticas
+    const stats = calcularEstadisticasReporte();
+
+    const htmlContent = `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Reporte de Seguimiento ADP - ${state.currentYear}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            padding: 40px;
+            max-width: 210mm;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #667eea;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        .header h2 {
+            color: #555;
+            font-size: 18px;
+            font-weight: normal;
+        }
+        .header .fecha {
+            margin-top: 10px;
+            color: #777;
+            font-size: 14px;
+        }
+        .info-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 25px;
+        }
+        .info-box h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .info-item {
+            font-size: 14px;
+        }
+        .info-item strong {
+            color: #555;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .stat-box {
+            text-align: center;
+            padding: 20px 10px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        .stat-box.success { background: linear-gradient(135deg, #11998e, #38ef7d); }
+        .stat-box.warning { background: linear-gradient(135deg, #f093fb, #f5576c); }
+        .stat-box.info { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            display: block;
+        }
+        .stat-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            opacity: 0.9;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .section h3 {
+            color: #667eea;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px 8px;
+            text-align: left;
+        }
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 10px;
+            transition: width 0.3s;
+        }
+        .status {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .status.pendiente { background: #eee; color: #666; }
+        .status.progreso { background: #e3f2fd; color: #1976d2; }
+        .status.lograda { background: #e8f5e9; color: #388e3c; }
+        .status.no-lograda { background: #ffebee; color: #d32f2f; }
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+            text-align: center;
+            color: #777;
+            font-size: 12px;
+        }
+        .dimension-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .dimension-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .dimension-name {
+            font-weight: 600;
+            color: #333;
+        }
+        .dimension-progress {
+            font-weight: bold;
+            color: #667eea;
+        }
+        @media print {
+            body { padding: 20px; }
+            .stat-box { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .progress-fill { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 Reporte de Seguimiento y Monitoreo</h1>
+        <h2>Convenio de Desempeño - Alta Dirección Pública</h2>
+        <p class="fecha">Generado el ${fechaActual}</p>
+    </div>
+
+    <div class="info-box">
+        <h3>Información del Convenio</h3>
+        <div class="info-grid">
+            <div class="info-item"><strong>Establecimiento:</strong> ${INFO_CONVENIO.establecimiento}</div>
+            <div class="info-item"><strong>Director:</strong> ${INFO_CONVENIO.director}</div>
+            <div class="info-item"><strong>Sostenedor:</strong> ${INFO_CONVENIO.sostenedor}</div>
+            <div class="info-item"><strong>Período:</strong> ${INFO_CONVENIO.duracion}</div>
+            <div class="info-item"><strong>Año en revisión:</strong> ${state.currentYear}</div>
+            <div class="info-item"><strong>Meta mínima:</strong> ${INFO_CONVENIO.metaMinimaCumplimiento}%</div>
+        </div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-box">
+            <span class="stat-number">${stats.cumplimientoGeneral}%</span>
+            <span class="stat-label">Cumplimiento General</span>
+        </div>
+        <div class="stat-box success">
+            <span class="stat-number">${stats.metasLogradas}</span>
+            <span class="stat-label">Metas Logradas</span>
+        </div>
+        <div class="stat-box info">
+            <span class="stat-number">${stats.metasEnProgreso}</span>
+            <span class="stat-label">En Progreso</span>
+        </div>
+        <div class="stat-box warning">
+            <span class="stat-number">${stats.metasPendientes}</span>
+            <span class="stat-label">Pendientes</span>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>📈 Avance por Dimensión</h3>
+        ${generarSeccionesDimensiones()}
+    </div>
+
+    <div class="section">
+        <h3>📋 Detalle de Metas</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 25%">Meta</th>
+                    <th style="width: 20%">Dimensión</th>
+                    <th style="width: 10%">Peso</th>
+                    <th style="width: 15%">Avance</th>
+                    <th style="width: 15%">Estado</th>
+                    <th style="width: 15%">Vencimiento</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${generarFilasMetas()}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <h3>📅 Próximos Hitos del Calendario</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 15%">Fecha</th>
+                    <th style="width: 35%">Hito</th>
+                    <th style="width: 25%">Categoría</th>
+                    <th style="width: 25%">Responsable</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${generarFilasHitos()}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        <p><strong>Convenio de Desempeño - Ley 20.501</strong></p>
+        <p>DAEM Ilustre Municipalidad de Parral</p>
+        <p style="margin-top: 10px; font-size: 11px;">
+            Este reporte fue generado automáticamente por el Panel de Gestión ADP<br>
+            Desarrollado por Juan P. Ramírez - Product Manager
+        </p>
+    </div>
+
+    <script>
+        // Auto-abrir diálogo de impresión/guardar como PDF
+        window.onload = function() {
+            setTimeout(function() {
+                window.print();
+            }, 500);
+        }
+    </script>
+</body>
+</html>
+    `;
+
+    reportWindow.document.write(htmlContent);
+    reportWindow.document.close();
+}
+
+function calcularEstadisticasReporte() {
+    const totalMetas = state.metas.length;
+    const metasLogradas = state.metas.filter(m => m.estado === 'lograda').length;
+    const metasEnProgreso = state.metas.filter(m => m.estado === 'progreso').length;
+    const metasPendientes = state.metas.filter(m => m.estado === 'pendiente').length;
+    const metasNoLogradas = state.metas.filter(m => m.estado === 'no-lograda').length;
+
+    // Calcular cumplimiento general ponderado
+    let cumplimientoGeneral = 0;
+    let totalPonderacion = 0;
+    state.metas.forEach(meta => {
+        cumplimientoGeneral += (meta.avance * meta.ponderacion) / 100;
+        totalPonderacion += meta.ponderacion;
+    });
+    cumplimientoGeneral = totalPonderacion > 0 ? Math.round((cumplimientoGeneral / totalPonderacion) * 100) : 0;
+
+    return {
+        totalMetas,
+        metasLogradas,
+        metasEnProgreso,
+        metasPendientes,
+        metasNoLogradas,
+        cumplimientoGeneral
+    };
+}
+
+function generarSeccionesDimensiones() {
+    let html = '';
+    Object.keys(DIMENSIONES).forEach(dimId => {
+        const dim = DIMENSIONES[dimId];
+        const metasDim = state.metas.filter(m => m.dimension === dimId);
+        const totalPond = metasDim.reduce((sum, m) => sum + m.ponderacion, 0);
+        const avancePond = metasDim.reduce((sum, m) => sum + (m.avance * m.ponderacion / 100), 0);
+        const porcentaje = totalPond > 0 ? Math.round((avancePond / totalPond) * 100) : 0;
+
+        html += `
+            <div class="dimension-section">
+                <div class="dimension-header">
+                    <span class="dimension-name">${dim.nombre} (Peso: ${dim.peso}%)</span>
+                    <span class="dimension-progress">${porcentaje}%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${porcentaje}%"></div>
+                </div>
+            </div>
+        `;
+    });
+    return html;
+}
+
+function generarFilasMetas() {
+    return state.metas.map(meta => {
+        const dim = DIMENSIONES[meta.dimension];
+        const estadoNombre = ESTADOS[meta.estado]?.nombre || meta.estado;
+        return `
+            <tr>
+                <td>${meta.nombre}</td>
+                <td>${dim?.nombre || meta.dimension}</td>
+                <td>${meta.ponderacion}%</td>
+                <td>
+                    <div class="progress-bar" style="height: 15px;">
+                        <div class="progress-fill" style="width: ${meta.avance}%"></div>
+                    </div>
+                    ${meta.avance}%
+                </td>
+                <td><span class="status ${meta.estado}">${estadoNombre}</span></td>
+                <td>${formatDate(meta.fechaCumplimiento)}</td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function generarFilasHitos() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const proximosHitos = state.hitos
+        .filter(h => new Date(h.fecha) >= today)
+        .sort((a, b) => new Date(a.fecha) - new Date(b.fecha))
+        .slice(0, 10);
+
+    if (proximosHitos.length === 0) {
+        return '<tr><td colspan="4" style="text-align: center; color: #777;">No hay hitos próximos</td></tr>';
+    }
+
+    return proximosHitos.map(hito => {
+        const cat = CATEGORIAS_HITOS[hito.categoria];
+        return `
+            <tr>
+                <td>${formatDate(hito.fecha)}</td>
+                <td>${hito.titulo}</td>
+                <td>${cat?.nombre || hito.categoria}</td>
+                <td>${hito.responsable || '-'}</td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function exportarExcel() {
+    // Generar CSV para Excel
+    let csv = 'Meta,Dimensión,Indicador,Ponderación,Avance,Estado,Fecha Cumplimiento\n';
+
+    state.metas.forEach(meta => {
+        const dim = DIMENSIONES[meta.dimension]?.nombre || meta.dimension;
+        const estado = ESTADOS[meta.estado]?.nombre || meta.estado;
+        const indicador = meta.indicador.replace(/"/g, '""').replace(/\n/g, ' ');
+        csv += `"${meta.nombre}","${dim}","${indicador}",${meta.ponderacion}%,${meta.avance}%,"${estado}","${meta.fechaCumplimiento}"\n`;
+    });
+
+    // Descargar archivo
+    const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `Reporte_ADP_${state.currentYear}.csv`;
+    link.click();
+
+    // Notificación
+    showNotification('✅ Archivo Excel descargado correctamente', 'success');
+}
+
+function imprimirReporte() {
+    generarReportePDF();
+}
+
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = 'sync-toast';
+    notification.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 20px; height: 20px;">
+            <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        ${message}
+    `;
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 3000);
+}
+
+// ============================================
+// Modal Actividades CEIA
+// ============================================
+
+// Estado para actividades CEIA personalizadas
+let actividadesCEIAPersonalizadas = [];
+
+// Cargar actividades personalizadas de localStorage
+function loadActividadesCEIA() {
+    const saved = localStorage.getItem('actividadesCEIA');
+    if (saved) {
+        actividadesCEIAPersonalizadas = JSON.parse(saved);
+    }
+}
+
+// Guardar actividades personalizadas en localStorage
+function saveActividadesCEIA() {
+    localStorage.setItem('actividadesCEIA', JSON.stringify(actividadesCEIAPersonalizadas));
+}
+
+// Obtener todas las actividades CEIA (base + personalizadas)
+function getTodasActividadesCEIA() {
+    return [...CALENDARIO_CEIA, ...actividadesCEIAPersonalizadas];
+}
+
+// Inicializar modal de actividades CEIA
+function initModalActividadCEIA() {
+    const btnAdd = document.getElementById('btnAddActividadCEIA');
+    const modal = document.getElementById('modalActividadCEIA');
+    const closeBtn = document.getElementById('closeModalActividadCEIA');
+    const cancelBtn = document.getElementById('cancelActividadCEIA');
+    const form = document.getElementById('formActividadCEIA');
+    const checkboxEvidencia = document.getElementById('actividadEsEvidencia');
+    const adpFields = document.getElementById('adpFields');
+    const dimensionSelect = document.getElementById('actividadDimension');
+    const metaSelect = document.getElementById('actividadMeta');
+
+    // Cargar actividades guardadas
+    loadActividadesCEIA();
+
+    // Abrir modal
+    if (btnAdd) {
+        btnAdd.addEventListener('click', () => {
+            openModalActividadCEIA();
+        });
+    }
+
+    // Cerrar modal
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeModalActividadCEIA);
+    }
+
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', closeModalActividadCEIA);
+    }
+
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModalActividadCEIA();
+            }
+        });
+    }
+
+    // Toggle campos ADP
+    if (checkboxEvidencia) {
+        checkboxEvidencia.addEventListener('change', (e) => {
+            if (adpFields) {
+                adpFields.style.display = e.target.checked ? 'block' : 'none';
+            }
+            if (e.target.checked) {
+                cargarMetasEnSelector();
+            }
+        });
+    }
+
+    // Filtrar metas por dimensión
+    if (dimensionSelect) {
+        dimensionSelect.addEventListener('change', (e) => {
+            cargarMetasEnSelector(e.target.value);
+        });
+    }
+
+    // Submit form
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            guardarActividadCEIA();
+        });
+    }
+}
+
+function openModalActividadCEIA() {
+    const modal = document.getElementById('modalActividadCEIA');
+    const form = document.getElementById('formActividadCEIA');
+    const adpFields = document.getElementById('adpFields');
+    const checkboxEvidencia = document.getElementById('actividadEsEvidencia');
+
+    // Reset form
+    if (form) form.reset();
+    if (adpFields) adpFields.style.display = 'none';
+    if (checkboxEvidencia) checkboxEvidencia.checked = false;
+
+    // Establecer fecha de hoy como default
+    const fechaInput = document.getElementById('actividadFecha');
+    if (fechaInput) {
+        fechaInput.value = new Date().toISOString().split('T')[0];
+    }
+
+    // Mostrar modal
+    if (modal) {
+        modal.classList.add('active');
+    }
+}
+
+function closeModalActividadCEIA() {
+    const modal = document.getElementById('modalActividadCEIA');
+    if (modal) {
+        modal.classList.remove('active');
+    }
+}
+
+function cargarMetasEnSelector(dimensionFiltro = '') {
+    const metaSelect = document.getElementById('actividadMeta');
+    if (!metaSelect) return;
+
+    // Limpiar opciones
+    metaSelect.innerHTML = '<option value="">Seleccione meta...</option>';
+
+    // Filtrar metas
+    let metasFiltradas = state.metas;
+    if (dimensionFiltro) {
+        metasFiltradas = metasFiltradas.filter(m => m.dimension === dimensionFiltro);
+    }
+
+    // Agregar opciones
+    metasFiltradas.forEach(meta => {
+        const option = document.createElement('option');
+        option.value = meta.id;
+        option.textContent = meta.nombre;
+        metaSelect.appendChild(option);
+    });
+}
+
+function guardarActividadCEIA() {
+    const titulo = document.getElementById('actividadTitulo').value.trim();
+    const fecha = document.getElementById('actividadFecha').value;
+    const tipo = document.getElementById('actividadTipo').value;
+    const esEvidencia = document.getElementById('actividadEsEvidencia').checked;
+    const dimension = document.getElementById('actividadDimension').value;
+    const metaId = document.getElementById('actividadMeta').value;
+
+    if (!titulo || !fecha || !tipo) {
+        showNotification('⚠️ Complete todos los campos obligatorios', 'warning');
+        return;
+    }
+
+    // Crear nueva actividad
+    const nuevaActividad = {
+        id: `ceia-custom-${Date.now()}`,
+        titulo: titulo,
+        fecha: fecha,
+        tipo: tipo,
+        esEvidenciaADP: esEvidencia,
+        dimensionADP: esEvidencia ? dimension : null,
+        metaRelacionada: esEvidencia ? metaId : null,
+        esPersonalizada: true
+    };
+
+    // Agregar a la lista
+    actividadesCEIAPersonalizadas.push(nuevaActividad);
+
+    // Guardar en localStorage
+    saveActividadesCEIA();
+
+    // Cerrar modal
+    closeModalActividadCEIA();
+
+    // Actualizar vista
+    renderCalendarioCEIA();
+
+    // Notificación
+    showNotification(`✅ Actividad "${titulo}" agregada al calendario`, 'success');
+}
+
+// Modificar renderCalendarioCEIA para usar todas las actividades
+const originalRenderCalendarioCEIA = renderCalendarioCEIA;
+renderCalendarioCEIA = function () {
+    const container = document.getElementById('ceiaList');
+    if (!container) return;
+
+    // Obtener todas las actividades (base + personalizadas)
+    const todasActividades = getTodasActividadesCEIA();
+
+    // Filtrar actividades
+    const actividadesFiltradas = todasActividades.filter(act => {
+        // Filtro por tipo
+        if (filtrosCEIA.tipo !== 'all' && act.tipo !== filtrosCEIA.tipo) {
+            return false;
+        }
+
+        // Filtro por mes
+        if (filtrosCEIA.mes !== 'all') {
+            const mes = parseInt(act.fecha.split('-')[1]);
+            if (mes !== parseInt(filtrosCEIA.mes)) {
+                return false;
+            }
+        }
+
+        // Filtro solo evidencias
+        if (filtrosCEIA.soloEvidencias && !act.esEvidenciaADP) {
+            return false;
+        }
+
+        return true;
+    });
+
+    // Actualizar contadores
+    updateCEIAStats(actividadesFiltradas);
+
+    // Agrupar por mes
+    const actividadesPorMes = agruparPorMes(actividadesFiltradas);
+
+    if (Object.keys(actividadesPorMes).length === 0) {
+        container.innerHTML = `
+            <div class="empty-state glass-card">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                <h3>No hay actividades para mostrar</h3>
+                <p>Ajusta los filtros o agrega nuevas actividades.</p>
+            </div>
+        `;
+        return;
+    }
+
+    let html = '';
+    const nombresMeses = ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    const diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+
+    Object.keys(actividadesPorMes).sort((a, b) => a - b).forEach(mes => {
+        const actividades = actividadesPorMes[mes];
+        const evidenciasEnMes = actividades.filter(a => a.esEvidenciaADP).length;
+
+        html += `
+            <div class="ceia-month-group">
+                <div class="ceia-month-header">
+                    <h3>
+                        📅 ${nombresMeses[parseInt(mes)]} 2026
+                        <span class="month-count">(${actividades.length} actividades${evidenciasEnMes > 0 ? `, ${evidenciasEnMes} evidencias` : ''})</span>
+                    </h3>
+                </div>
+                <div class="ceia-month-activities">
+        `;
+
+        actividades.forEach(act => {
+            const fecha = new Date(act.fecha + 'T12:00:00');
+            const dia = fecha.getDate();
+            const diaSemana = diasSemana[fecha.getDay()];
+            const categoria = CATEGORIAS_CEIA[act.tipo] || { nombre: act.tipo, icon: '📋' };
+
+            // Buscar el nombre de la meta relacionada
+            let nombreMeta = '';
+            if (act.metaRelacionada) {
+                const meta = METAS_INICIALES.find(m => m.id === act.metaRelacionada) ||
+                    state.metas.find(m => m.id === act.metaRelacionada);
+                if (meta) {
+                    nombreMeta = meta.nombre;
+                }
+            }
+
+            const esPersonalizada = act.esPersonalizada ? ' ✨' : '';
+
+            html += `
+                <div class="ceia-activity ${act.tipo}">
+                    <div class="activity-date">
+                        <span class="day">${dia}</span>
+                        <span class="weekday">${diaSemana}</span>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-title">
+                            ${categoria.icon || ''} ${act.titulo}${esPersonalizada}
+                            <span class="tipo-badge ${act.tipo}">${categoria.nombre}</span>
+                        </div>
+                        ${act.esEvidenciaADP && nombreMeta ? `
+                            <div class="activity-meta">
+                                📎 Meta ADP: <strong>${nombreMeta}</strong>
+                            </div>
+                        ` : ''}
+                    </div>
+                    ${act.esEvidenciaADP ? `
+                        <div class="activity-evidencia">
+                            <span class="evidencia-tag">
+                                <span class="star">⭐</span> Evidencia ADP
+                            </span>
+                            ${act.dimensionADP ? `
+                                <span class="dimension-tag ${act.dimensionADP}">
+                                    ${DIMENSIONES[act.dimensionADP]?.nombre || act.dimensionADP}
+                                </span>
+                            ` : ''}
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        });
+
+        html += `
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+};
+
+// Inicializar modal cuando cargue el DOM
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(initModalActividadCEIA, 250);
+});
+

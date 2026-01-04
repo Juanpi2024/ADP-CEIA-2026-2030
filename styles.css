@@ -835,7 +835,7 @@ body::before {
 
 .calendar-day {
     aspect-ratio: 1;
-    min-height: 80px;
+    min-height: 64px;
     padding: var(--spacing-sm);
     background: var(--glass-bg);
     border: 1px solid transparent;
@@ -886,7 +886,7 @@ body::before {
 }
 
 .day-event {
-    font-size: 0.65rem;
+    font-size: 0.72rem;
     padding: 2px 4px;
     border-radius: 3px;
     white-space: nowrap;
@@ -1725,4 +1725,521 @@ body::before {
 
 .empty-state p {
     font-size: 0.9rem;
+}
+
+/* ============================================
+   Calendario CEIA
+   ============================================ */
+
+/* Header del Calendario CEIA */
+.ceia-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    flex-wrap: wrap;
+    gap: var(--spacing-lg);
+}
+
+.ceia-title h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.ceia-title h2 svg {
+    stroke: #ffd700;
+}
+
+.ceia-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-top: var(--spacing-xs);
+}
+
+.ceia-stats {
+    display: flex;
+    gap: var(--spacing-lg);
+}
+
+.ceia-stat {
+    text-align: center;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+}
+
+.ceia-stat.evidencia {
+    border-color: rgba(255, 215, 0, 0.3);
+    background: rgba(255, 215, 0, 0.1);
+}
+
+.stat-number {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+}
+
+.ceia-stat.evidencia .stat-number {
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Filtros CEIA */
+.ceia-filters {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.ceia-filters .btn-secondary {
+    margin-left: auto;
+}
+
+.ceia-filters .btn-secondary svg {
+    width: 18px;
+    height: 18px;
+}
+
+.filter-checkbox {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    user-select: none;
+}
+
+.checkbox-label input {
+    display: none;
+}
+
+.checkbox-custom {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--glass-border);
+    border-radius: 4px;
+    background: var(--glass-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+}
+
+.checkbox-label input:checked+.checkbox-custom {
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    border-color: #ffd700;
+}
+
+.checkbox-label input:checked+.checkbox-custom::after {
+    content: '✓';
+    color: #000;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Leyenda CEIA */
+.ceia-legend {
+    display: flex;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-md) var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.ceia-legend .legend-color.consejo {
+    background: #667eea;
+}
+
+.ceia-legend .legend-color.administrativo {
+    background: #4facfe;
+}
+
+.ceia-legend .legend-color.evaluacion {
+    background: #f5576c;
+}
+
+.ceia-legend .legend-color.celebracion {
+    background: #38ef7d;
+}
+
+.ceia-legend .legend-color.entrega {
+    background: #f093fb;
+}
+
+.ceia-legend .legend-color.feriado {
+    background: #888888;
+}
+
+.evidencia-badge {
+    background: rgba(255, 215, 0, 0.15);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.star-icon {
+    font-size: 0.9rem;
+}
+
+/* Lista de Actividades CEIA */
+.ceia-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+}
+
+.ceia-month-group {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.ceia-month-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-lg);
+    background: rgba(102, 126, 234, 0.1);
+    border-bottom: 1px solid var(--glass-border);
+}
+
+.ceia-month-header h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.month-count {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.ceia-month-activities {
+    padding: var(--spacing-md);
+}
+
+.ceia-activity {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    transition: var(--transition-fast);
+    border-left: 3px solid transparent;
+    margin-bottom: var(--spacing-sm);
+}
+
+.ceia-activity:last-child {
+    margin-bottom: 0;
+}
+
+.ceia-activity:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.ceia-activity.consejo {
+    border-left-color: #667eea;
+}
+
+.ceia-activity.administrativo {
+    border-left-color: #4facfe;
+}
+
+.ceia-activity.evaluacion {
+    border-left-color: #f5576c;
+}
+
+.ceia-activity.celebracion {
+    border-left-color: #38ef7d;
+}
+
+.ceia-activity.entrega {
+    border-left-color: #f093fb;
+}
+
+.ceia-activity.feriado {
+    border-left-color: #888888;
+    opacity: 0.7;
+}
+
+.activity-date {
+    width: 70px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.activity-date .day {
+    display: block;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.activity-date .weekday {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.activity-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.activity-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.activity-title .tipo-badge {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.tipo-badge.consejo {
+    background: rgba(102, 126, 234, 0.2);
+    color: #667eea;
+}
+
+.tipo-badge.administrativo {
+    background: rgba(79, 172, 254, 0.2);
+    color: #4facfe;
+}
+
+.tipo-badge.evaluacion {
+    background: rgba(245, 87, 108, 0.2);
+    color: #f5576c;
+}
+
+.tipo-badge.celebracion {
+    background: rgba(56, 239, 125, 0.2);
+    color: #38ef7d;
+}
+
+.tipo-badge.entrega {
+    background: rgba(240, 147, 251, 0.2);
+    color: #f093fb;
+}
+
+.tipo-badge.feriado {
+    background: rgba(136, 136, 136, 0.2);
+    color: #888888;
+}
+
+.activity-meta {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+/* Badge Evidencia ADP */
+.activity-evidencia {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex-shrink: 0;
+}
+
+.evidencia-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 140, 0, 0.2));
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #ffd700;
+}
+
+.evidencia-tag .star {
+    font-size: 0.9rem;
+}
+
+.dimension-tag {
+    display: inline-flex;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.dimension-tag.pedagogica {
+    background: rgba(102, 126, 234, 0.2);
+    color: var(--color-pedagogica);
+}
+
+.dimension-tag.liderazgo {
+    background: rgba(255, 215, 0, 0.2);
+    color: var(--color-liderazgo);
+}
+
+.dimension-tag.convivencia {
+    background: rgba(255, 107, 107, 0.2);
+    color: var(--color-convivencia);
+}
+
+.dimension-tag.resultados {
+    background: rgba(56, 239, 125, 0.2);
+    color: var(--color-resultados);
+}
+
+.dimension-tag.recursos {
+    background: rgba(240, 147, 251, 0.2);
+    color: var(--color-recursos);
+}
+
+/* Toast de Sincronización */
+.sync-toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--gradient-success);
+    color: white;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: var(--radius-md);
+    box-shadow: 0 8px 32px rgba(56, 239, 125, 0.4);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    z-index: 1000;
+    animation: slideInUp 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+}
+
+@keyframes slideInUp {
+    from {
+        transform: translateY(100px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+}
+
+/* Responsive para CEIA */
+@media (max-width: 768px) {
+    .ceia-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .ceia-stats {
+        justify-content: center;
+    }
+
+    .ceia-filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .ceia-filters .btn-secondary {
+        margin-left: 0;
+    }
+
+    .ceia-activity {
+        flex-wrap: wrap;
+    }
+
+    .activity-evidencia {
+        width: 100%;
+        margin-top: var(--spacing-sm);
+        padding-left: 78px;
+    }
+}
+
+/* ============================================
+   Modal Actividad CEIA
+   ============================================ */
+
+.evidencia-section {
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    margin: var(--spacing-md) 0;
+}
+
+.evidencia-checkbox {
+    font-size: 1rem;
+}
+
+.evidencia-checkbox .evidencia-label {
+    font-weight: 600;
+    color: #ffd700;
+}
+
+.adp-fields {
+    background: rgba(102, 126, 234, 0.1);
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.ceia-filters .btn-primary {
+    margin-left: 0;
 }

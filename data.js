@@ -626,13 +626,97 @@ const MESES = [
     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
 ];
 
+// Categorías de actividades CEIA
+const CATEGORIAS_CEIA = {
+    consejo: { id: 'consejo', nombre: 'Consejo', color: '#667eea', icon: '👥' },
+    administrativo: { id: 'administrativo', nombre: 'Administrativo', color: '#4facfe', icon: '📋' },
+    evaluacion: { id: 'evaluacion', nombre: 'Evaluación', color: '#f5576c', icon: '📊' },
+    celebracion: { id: 'celebracion', nombre: 'Celebración', color: '#38ef7d', icon: '🎉' },
+    entrega: { id: 'entrega', nombre: 'Entrega', color: '#f093fb', icon: '📤' },
+    feriado: { id: 'feriado', nombre: 'Feriado', color: '#888888', icon: '🏖️' }
+};
+
+// Calendario Anual CEIA 2026
+const CALENDARIO_CEIA = [
+    // === MARZO ===
+    { id: 'ceia-1', fecha: '2026-03-02', titulo: 'Jornada de Organización', tipo: 'administrativo', esEvidenciaADP: true, dimensionADP: 'liderazgo', metaRelacionada: 'meta-7' },
+    { id: 'ceia-2', fecha: '2026-03-03', titulo: 'Jornada de Organización (Día 2)', tipo: 'administrativo', esEvidenciaADP: true, dimensionADP: 'liderazgo', metaRelacionada: 'meta-7' },
+    { id: 'ceia-3', fecha: '2026-03-04', titulo: 'Inicio Año Escolar', tipo: 'celebracion', esEvidenciaADP: false },
+    { id: 'ceia-4', fecha: '2026-03-05', titulo: 'Primer día de clases', tipo: 'celebracion', esEvidenciaADP: false },
+    { id: 'ceia-5', fecha: '2026-03-10', titulo: 'Prueba de Diagnóstico', tipo: 'evaluacion', esEvidenciaADP: true, dimensionADP: 'resultados', metaRelacionada: 'meta-15' },
+    { id: 'ceia-6', fecha: '2026-03-11', titulo: 'Consejo Técnico', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-3' },
+    { id: 'ceia-7', fecha: '2026-03-12', titulo: 'Reunión de Apoderados', tipo: 'administrativo', esEvidenciaADP: true, dimensionADP: 'convivencia', metaRelacionada: 'meta-10' },
+    { id: 'ceia-8', fecha: '2026-03-13', titulo: 'Día Nacional contra el Ciberacoso', tipo: 'celebracion', esEvidenciaADP: false },
+    { id: 'ceia-9', fecha: '2026-03-14', titulo: 'Día del Número Pi', tipo: 'celebracion', esEvidenciaADP: false },
+    { id: 'ceia-10', fecha: '2026-03-15', titulo: 'Entrega Planificaciones Anuales', tipo: 'entrega', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-7' },
+    { id: 'ceia-11', fecha: '2026-03-17', titulo: '1° Consejo Escolar', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'liderazgo', metaRelacionada: 'meta-9' },
+    { id: 'ceia-12', fecha: '2026-03-19', titulo: 'Consejo: Trabajo Colaborativo PIE', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-3' },
+    { id: 'ceia-13', fecha: '2026-03-21', titulo: 'Día Eliminación Discriminación Racial', tipo: 'celebracion', esEvidenciaADP: true, dimensionADP: 'convivencia', metaRelacionada: 'meta-10' },
+    { id: 'ceia-14', fecha: '2026-03-22', titulo: 'Día Mundial del Agua', tipo: 'celebracion', esEvidenciaADP: false },
+    { id: 'ceia-15', fecha: '2026-03-23', titulo: 'Inicio Revisión de registros UTP', tipo: 'evaluacion', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-1' },
+    { id: 'ceia-16', fecha: '2026-03-25', titulo: 'Acto de inicio de año', tipo: 'celebracion', esEvidenciaADP: false },
+    { id: 'ceia-17', fecha: '2026-03-26', titulo: 'Consejo: Trabajo Colaborativo UTP', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-3' },
+    { id: 'ceia-18', fecha: '2026-03-26', titulo: 'Entrega de planificaciones', tipo: 'entrega', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-7' },
+
+    // === ABRIL ===
+    { id: 'ceia-19', fecha: '2026-04-01', titulo: 'Reunión Equipo de Gestión', tipo: 'administrativo', esEvidenciaADP: true, dimensionADP: 'liderazgo', metaRelacionada: 'meta-7' },
+    { id: 'ceia-20', fecha: '2026-04-01', titulo: 'Inicio ejecución PME', tipo: 'administrativo', esEvidenciaADP: true, dimensionADP: 'liderazgo', metaRelacionada: 'meta-9' },
+    { id: 'ceia-21', fecha: '2026-04-02', titulo: 'Consejo General', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-3' },
+    { id: 'ceia-22', fecha: '2026-04-02', titulo: 'Día Concienciación Autismo', tipo: 'celebracion', esEvidenciaADP: true, dimensionADP: 'convivencia', metaRelacionada: 'meta-10' },
+    { id: 'ceia-23', fecha: '2026-04-03', titulo: 'Feriado Legal (Viernes Santo)', tipo: 'feriado', esEvidenciaADP: false },
+    { id: 'ceia-24', fecha: '2026-04-06', titulo: 'Inicio 1° Revisión de notas', tipo: 'evaluacion', esEvidenciaADP: true, dimensionADP: 'resultados', metaRelacionada: 'meta-13' },
+    { id: 'ceia-25', fecha: '2026-04-09', titulo: 'Consejo Técnico', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-3' },
+    { id: 'ceia-26', fecha: '2026-04-16', titulo: 'Jornada Revisión PME', tipo: 'administrativo', esEvidenciaADP: true, dimensionADP: 'liderazgo', metaRelacionada: 'meta-9' },
+    { id: 'ceia-27', fecha: '2026-04-20', titulo: 'Inicio Exámenes TP', tipo: 'evaluacion', esEvidenciaADP: true, dimensionADP: 'resultados', metaRelacionada: 'meta-14' },
+    { id: 'ceia-28', fecha: '2026-04-23', titulo: 'Día Mundial del Libro', tipo: 'celebracion', esEvidenciaADP: false },
+    { id: 'ceia-29', fecha: '2026-04-27', titulo: 'Día del Carabinero', tipo: 'celebracion', esEvidenciaADP: false },
+    { id: 'ceia-30', fecha: '2026-04-29', titulo: 'Día de la Convivencia Escolar', tipo: 'celebracion', esEvidenciaADP: true, dimensionADP: 'convivencia', metaRelacionada: 'meta-10' },
+    { id: 'ceia-31', fecha: '2026-04-30', titulo: 'Consejo: Trabajo Colaborativo', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-3' },
+    { id: 'ceia-32', fecha: '2026-04-30', titulo: 'Entrega de planificaciones', tipo: 'entrega', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-7' },
+
+    // === MAYO ===
+    { id: 'ceia-33', fecha: '2026-05-01', titulo: 'Día del Trabajo', tipo: 'feriado', esEvidenciaADP: false },
+    { id: 'ceia-34', fecha: '2026-05-04', titulo: 'Inicio visitas a salas - Acompañamiento', tipo: 'administrativo', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-1' },
+    { id: 'ceia-35', fecha: '2026-05-04', titulo: '2° Revisión de notas', tipo: 'evaluacion', esEvidenciaADP: true, dimensionADP: 'resultados', metaRelacionada: 'meta-13' },
+    { id: 'ceia-36', fecha: '2026-05-06', titulo: 'Reunión Equipo de Gestión', tipo: 'administrativo', esEvidenciaADP: true, dimensionADP: 'liderazgo', metaRelacionada: 'meta-7' },
+    { id: 'ceia-37', fecha: '2026-05-07', titulo: 'Consejo General', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-3' },
+    { id: 'ceia-38', fecha: '2026-05-08', titulo: 'Día de la Integridad', tipo: 'celebracion', esEvidenciaADP: false },
+    { id: 'ceia-39', fecha: '2026-05-11', titulo: 'Celebración Día del Estudiante', tipo: 'celebracion', esEvidenciaADP: false },
+    { id: 'ceia-40', fecha: '2026-05-13', titulo: 'Comienzo acompañamiento pedagógico', tipo: 'administrativo', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-1' },
+    { id: 'ceia-41', fecha: '2026-05-14', titulo: 'Consejo Técnico', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-3' },
+    { id: 'ceia-42', fecha: '2026-05-17', titulo: 'Día contra la Homofobia/Plan Inclusión', tipo: 'celebracion', esEvidenciaADP: true, dimensionADP: 'convivencia', metaRelacionada: 'meta-10' },
+    { id: 'ceia-43', fecha: '2026-05-21', titulo: 'Día de las Glorias Navales', tipo: 'feriado', esEvidenciaADP: false },
+    { id: 'ceia-44', fecha: '2026-05-25', titulo: 'Inicio Semana de la Seguridad', tipo: 'administrativo', esEvidenciaADP: false },
+    { id: 'ceia-45', fecha: '2026-05-26', titulo: 'Taller para Padres PIE', tipo: 'administrativo', esEvidenciaADP: true, dimensionADP: 'convivencia', metaRelacionada: 'meta-10' },
+    { id: 'ceia-46', fecha: '2026-05-28', titulo: 'Consejo: Trabajo Colaborativo', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-3' },
+    { id: 'ceia-47', fecha: '2026-05-28', titulo: 'Simulacro PISE', tipo: 'administrativo', esEvidenciaADP: false },
+    { id: 'ceia-48', fecha: '2026-05-28', titulo: 'Entrega de planificaciones', tipo: 'entrega', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-7' },
+
+    // === JUNIO ===
+    { id: 'ceia-49', fecha: '2026-06-04', titulo: 'Consejo General', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-3' },
+    { id: 'ceia-50', fecha: '2026-06-11', titulo: 'Consejo Técnico', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-3' },
+    { id: 'ceia-51', fecha: '2026-06-12', titulo: 'Cierre de promedios de notas', tipo: 'evaluacion', esEvidenciaADP: true, dimensionADP: 'resultados', metaRelacionada: 'meta-13' },
+    { id: 'ceia-52', fecha: '2026-06-12', titulo: '2° Consejo Escolar', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'liderazgo', metaRelacionada: 'meta-9' },
+    { id: 'ceia-53', fecha: '2026-06-18', titulo: 'Último día de clases 1° Semestre', tipo: 'administrativo', esEvidenciaADP: false },
+    { id: 'ceia-54', fecha: '2026-06-19', titulo: 'Jornada de Evaluación/Reflexión', tipo: 'administrativo', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-3' },
+    { id: 'ceia-55', fecha: '2026-06-19', titulo: 'Entrega de planificaciones', tipo: 'entrega', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-7' },
+    { id: 'ceia-56', fecha: '2026-06-22', titulo: 'Inicio Vacaciones de Invierno', tipo: 'feriado', esEvidenciaADP: false },
+
+    // === JULIO ===
+    { id: 'ceia-57', fecha: '2026-07-03', titulo: 'Fin Vacaciones de Invierno', tipo: 'feriado', esEvidenciaADP: false },
+    { id: 'ceia-58', fecha: '2026-07-06', titulo: 'Retorno a clases 2° Semestre', tipo: 'celebracion', esEvidenciaADP: false },
+    { id: 'ceia-59', fecha: '2026-07-28', titulo: 'Prueba Sincrónica', tipo: 'evaluacion', esEvidenciaADP: true, dimensionADP: 'resultados', metaRelacionada: 'meta-15' }
+];
+
 // Exportar datos para uso global
 if (typeof window !== 'undefined') {
     window.DIMENSIONES = DIMENSIONES;
     window.ESTADOS = ESTADOS;
     window.CATEGORIAS_HITOS = CATEGORIAS_HITOS;
+    window.CATEGORIAS_CEIA = CATEGORIAS_CEIA;
     window.METAS_INICIALES = METAS_INICIALES;
     window.HITOS_INICIALES = HITOS_INICIALES;
+    window.CALENDARIO_CEIA = CALENDARIO_CEIA;
     window.EVOLUCION_TRIMESTRAL = EVOLUCION_TRIMESTRAL;
     window.INFO_CONVENIO = INFO_CONVENIO;
     window.MESES = MESES;

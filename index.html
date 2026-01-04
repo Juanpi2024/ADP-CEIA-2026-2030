@@ -80,6 +80,13 @@
                 </svg>
                 <span>Dashboard Ejecutivo</span>
             </button>
+            <button class="tab-btn" data-tab="calendario-ceia">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path
+                        d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+                <span>Calendario CEIA</span>
+            </button>
         </div>
     </nav>
 
@@ -110,13 +117,6 @@
                         <option value="no-lograda">No Lograda</option>
                     </select>
                 </div>
-                <button class="btn-primary" id="btnAddMeta">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="12" y1="5" x2="12" y2="19" />
-                        <line x1="5" y1="12" x2="19" y2="12" />
-                    </svg>
-                    Nueva Meta
-                </button>
             </div>
 
             <!-- Resumen de Dimensiones -->
@@ -458,6 +458,120 @@
                 </table>
             </div>
         </section>
+
+        <!-- Pestaña: Calendario CEIA -->
+        <section id="calendario-ceia" class="tab-content">
+            <!-- Header y Filtros -->
+            <div class="ceia-header glass-card">
+                <div class="ceia-title">
+                    <h2>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            style="width: 28px; height: 28px; vertical-align: middle;">
+                            <path
+                                d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                        </svg>
+                        Calendario Anual CEIA 2026
+                    </h2>
+                    <p class="ceia-subtitle">Actividades escolares y su relación con las metas del ADP</p>
+                </div>
+                <div class="ceia-stats">
+                    <div class="ceia-stat">
+                        <span class="stat-number" id="totalActividades">0</span>
+                        <span class="stat-label">Actividades</span>
+                    </div>
+                    <div class="ceia-stat evidencia">
+                        <span class="stat-number" id="totalEvidencias">0</span>
+                        <span class="stat-label">Evidencias ADP</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="ceia-filters glass-card">
+                <div class="filter-group">
+                    <label>Tipo de Actividad:</label>
+                    <select id="filterTipoCEIA">
+                        <option value="all">Todos los tipos</option>
+                        <option value="consejo">Consejos</option>
+                        <option value="administrativo">Administrativo</option>
+                        <option value="evaluacion">Evaluación</option>
+                        <option value="celebracion">Celebración</option>
+                        <option value="entrega">Entregas</option>
+                        <option value="feriado">Feriados</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Mes:</label>
+                    <select id="filterMesCEIA">
+                        <option value="all">Todos los meses</option>
+                        <option value="3">Marzo</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Mayo</option>
+                        <option value="6">Junio</option>
+                        <option value="7">Julio</option>
+                    </select>
+                </div>
+                <div class="filter-group filter-checkbox">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="filterSoloEvidencias">
+                        <span class="checkbox-custom"></span>
+                        Solo Evidencias ADP
+                    </label>
+                </div>
+                <button class="btn-secondary" id="btnSincronizarCEIA">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M23 4v6h-6" />
+                        <path d="M1 20v-6h6" />
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                    </svg>
+                    Sincronizar con Hitos
+                </button>
+                <button class="btn-primary" id="btnAddActividadCEIA">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    Nueva Actividad
+                </button>
+            </div>
+
+            <!-- Leyenda -->
+            <div class="ceia-legend glass-card">
+                <div class="legend-item">
+                    <span class="legend-color consejo"></span>
+                    <span>Consejo</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color administrativo"></span>
+                    <span>Administrativo</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color evaluacion"></span>
+                    <span>Evaluación</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color celebracion"></span>
+                    <span>Celebración</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color entrega"></span>
+                    <span>Entrega</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color feriado"></span>
+                    <span>Feriado</span>
+                </div>
+                <div class="legend-item evidencia-badge">
+                    <span class="star-icon">⭐</span>
+                    <span>Evidencia ADP</span>
+                </div>
+            </div>
+
+            <!-- Lista de Actividades por Mes -->
+            <div class="ceia-list" id="ceiaList">
+                <!-- Las actividades se cargarán dinámicamente -->
+            </div>
+        </section>
     </main>
 
     <!-- Modal para Metas -->
@@ -596,6 +710,80 @@
             <div class="modal-body" id="detalleContent">
                 <!-- El contenido se cargará dinámicamente -->
             </div>
+        </div>
+    </div>
+
+    <!-- Modal para Actividad CEIA -->
+    <div class="modal-overlay" id="modalActividadCEIA">
+        <div class="modal glass-card">
+            <div class="modal-header">
+                <h2 id="modalActividadTitle">Nueva Actividad CEIA</h2>
+                <button class="modal-close" id="closeModalActividadCEIA" title="Cerrar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+            <form id="formActividadCEIA">
+                <div class="form-group">
+                    <label for="actividadTitulo">Título de la Actividad *</label>
+                    <input type="text" id="actividadTitulo" placeholder="Ej: Consejo Técnico Pedagógico" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="actividadFecha">Fecha *</label>
+                        <input type="date" id="actividadFecha" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="actividadTipo">Tipo de Actividad *</label>
+                        <select id="actividadTipo" required>
+                            <option value="consejo">Consejo</option>
+                            <option value="administrativo">Administrativo</option>
+                            <option value="evaluacion">Evaluación</option>
+                            <option value="celebracion">Celebración</option>
+                            <option value="entrega">Entrega</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Sección Evidencia ADP -->
+                <div class="form-group evidencia-section">
+                    <label class="checkbox-label evidencia-checkbox">
+                        <input type="checkbox" id="actividadEsEvidencia">
+                        <span class="checkbox-custom"></span>
+                        <span class="evidencia-label">⭐ Esta actividad es evidencia para el ADP</span>
+                    </label>
+                </div>
+
+                <div class="form-group adp-fields" id="adpFields" style="display: none;">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="actividadDimension">Dimensión ADP</label>
+                            <select id="actividadDimension">
+                                <option value="">Seleccione dimensión...</option>
+                                <option value="pedagogica">Gestión Pedagógica</option>
+                                <option value="liderazgo">Liderazgo</option>
+                                <option value="convivencia">Convivencia Escolar</option>
+                                <option value="recursos">Gestión de Recursos</option>
+                                <option value="resultados">Resultados</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="actividadMeta">Meta Relacionada</label>
+                            <select id="actividadMeta">
+                                <option value="">Seleccione meta...</option>
+                                <!-- Las opciones se cargarán dinámicamente -->
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancelActividadCEIA">Cancelar</button>
+                    <button type="submit" class="btn-primary">Guardar Actividad</button>
+                </div>
+            </form>
         </div>
     </div>
 
