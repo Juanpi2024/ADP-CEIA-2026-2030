@@ -399,7 +399,7 @@ const HITOS_INICIALES = [
         id: 'hito-5',
         titulo: 'Taller Desarrollo Profesional',
         descripcion: 'Primer taller de desarrollo profesional docente del semestre.',
-        fecha: '2026-04-25',
+        fecha: '2026-04-24',
         categoria: 'capacitacion',
         responsable: 'UTP'
     },
@@ -459,7 +459,7 @@ const HITOS_INICIALES = [
         id: 'hito-12',
         titulo: 'Visita DAEM - Seguimiento',
         descripcion: 'Primera visita anual del sostenedor para seguimiento de avances.',
-        fecha: '2026-07-25',
+        fecha: '2026-07-24',
         categoria: 'evaluacion',
         responsable: 'DAEM - Director'
     },
@@ -469,7 +469,7 @@ const HITOS_INICIALES = [
         id: 'hito-13',
         titulo: 'Segunda Planificación Semestral',
         descripcion: 'Presentación de planificación del segundo semestre.',
-        fecha: '2026-08-01',
+        fecha: '2026-08-03',
         categoria: 'entrega',
         responsable: 'Director'
     },
@@ -485,7 +485,7 @@ const HITOS_INICIALES = [
         id: 'hito-15',
         titulo: 'Aplicación Encuestas IDPS',
         descripcion: 'Aplicación de encuestas de indicadores de desarrollo personal y social.',
-        fecha: '2026-09-05',
+        fecha: '2026-09-07',
         categoria: 'evaluacion',
         responsable: 'Encargado Convivencia'
     },
@@ -649,7 +649,7 @@ const CALENDARIO_CEIA = [
     { id: 'ceia-7', fecha: '2026-03-12', titulo: 'Reunión de Apoderados', tipo: 'administrativo', esEvidenciaADP: true, dimensionADP: 'convivencia', metaRelacionada: 'meta-10' },
     { id: 'ceia-8', fecha: '2026-03-13', titulo: 'Día Nacional contra el Ciberacoso', tipo: 'celebracion', esEvidenciaADP: false },
     { id: 'ceia-9', fecha: '2026-03-13', titulo: 'Día del Número Pi (celebración)', tipo: 'celebracion', esEvidenciaADP: false },
-    { id: 'ceia-10', fecha: '2026-03-15', titulo: 'Entrega Planificaciones Anuales', tipo: 'entrega', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-7' },
+    { id: 'ceia-10', fecha: '2026-03-16', titulo: 'Entrega Planificaciones Anuales', tipo: 'entrega', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-7' },
     { id: 'ceia-11', fecha: '2026-03-17', titulo: '1° Consejo Escolar', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'liderazgo', metaRelacionada: 'meta-9' },
     { id: 'ceia-12', fecha: '2026-03-19', titulo: 'Consejo: Trabajo Colaborativo PIE', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-3' },
     { id: 'ceia-13', fecha: '2026-03-20', titulo: 'Día Eliminación Discriminación Racial', tipo: 'celebracion', esEvidenciaADP: true, dimensionADP: 'convivencia', metaRelacionada: 'meta-10' },
