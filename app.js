@@ -14,8 +14,60 @@ let state = {
         dimension: 'all',
         estado: 'all'
     },
-    charts: {}
+    charts: {},
+    syncStatus: 'offline' // 'offline', 'syncing', 'synced', 'error'
 };
+
+// ============================================
+// Configuración Google Sheets API
+// ============================================
+const SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbwz0X07CgwK9NCZxAPz50dv1rtgNNyYrze4pp_vdYWA_4B6aEeOfzzd2-h8aupc0gS2/exec';
+
+// Función para hacer peticiones a la API
+async function sheetsAPI(action, data = null) {
+    try {
+        updateSyncStatus('syncing');
+
+        const options = data ? {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({ action, ...data })
+        } : {
+            method: 'GET'
+        };
+
+        const url = data ? SHEETS_API_URL : `${SHEETS_API_URL}?action=${action}`;
+        const response = await fetch(url, options);
+        const result = await response.json();
+
+        if (result.error) {
+            throw new Error(result.error);
+        }
+
+        updateSyncStatus('synced');
+        return result;
+    } catch (error) {
+        console.error('Error en sheetsAPI:', error);
+        updateSyncStatus('error');
+        throw error;
+    }
+}
+
+// Actualizar indicador de sincronización
+function updateSyncStatus(status) {
+    state.syncStatus = status;
+    const indicator = document.getElementById('syncIndicator');
+    if (indicator) {
+        indicator.className = `sync-indicator ${status}`;
+        const statusTexts = {
+            'offline': '● Offline',
+            'syncing': '● Sincronizando...',
+            'synced': '● Sincronizado',
+            'error': '● Error de conexión'
+        };
+        indicator.textContent = statusTexts[status] || '● Offline';
+    }
+}
 
 // Inicialización de la aplicación
 document.addEventListener('DOMContentLoaded', () => {
@@ -45,7 +97,7 @@ function initializeApp() {
 // ============================================
 
 function loadData() {
-    // Intentar cargar desde localStorage
+    // Primero cargar desde localStorage como fallback rápido
     const savedMetas = localStorage.getItem('adp_metas');
     const savedHitos = localStorage.getItem('adp_hitos');
 
@@ -60,11 +112,124 @@ function loadData() {
     } else {
         state.hitos = JSON.parse(JSON.stringify(HITOS_INICIALES));
     }
+
+    // Luego intentar sincronizar con Google Sheets
+    syncFromSheets();
 }
 
+// Sincronizar desde Google Sheets
+async function syncFromSheets() {
+    try {
+        const data = await sheetsAPI('getAll');
+
+        // Si no hay datos en Sheets, enviar los datos locales (carga inicial)
+        const sheetsVacio = (!data.metas || data.metas.length === 0) &&
+            (!data.hitos || data.hitos.length === 0);
+
+        if (sheetsVacio) {
+            console.log('Sheets vacío - enviando datos iniciales...');
+            await enviarDatosIniciales();
+            showNotification('📤 Datos iniciales enviados a Google Sheets', 'success');
+            return;
+        }
+
+        // Solo actualizar si hay datos en Sheets
+        if (data.metas && data.metas.length > 0) {
+            state.metas = data.metas;
+            localStorage.setItem('adp_metas', JSON.stringify(state.metas));
+        }
+
+        if (data.hitos && data.hitos.length > 0) {
+            state.hitos = data.hitos;
+            localStorage.setItem('adp_hitos', JSON.stringify(state.hitos));
+        }
+
+        if (data.actividades && data.actividades.length > 0) {
+            // Cargar actividades personalizadas desde Sheets
+            actividadesCEIAPersonalizadas = data.actividades.filter(a => a.esPersonalizada);
+            localStorage.setItem('actividadesCEIA', JSON.stringify(actividadesCEIAPersonalizadas));
+        }
+
+        // Re-renderizar con datos actualizados
+        renderMetas();
+        updateDimensionSummary();
+        renderCalendar();
+        renderUpcomingEvents();
+
+        showNotification('✅ Datos sincronizados desde Google Sheets', 'success');
+    } catch (error) {
+        console.log('Usando datos locales (offline):', error.message);
+        updateSyncStatus('offline');
+    }
+}
+
+// Enviar datos iniciales a Google Sheets
+async function enviarDatosIniciales() {
+    try {
+        updateSyncStatus('syncing');
+
+        // Enviar metas
+        await sheetsAPI('saveMetas', { metas: state.metas });
+        console.log('Metas enviadas:', state.metas.length);
+
+        // Enviar hitos
+        await sheetsAPI('saveHitos', { hitos: state.hitos });
+        console.log('Hitos enviados:', state.hitos.length);
+
+        // Enviar actividades CEIA (todas, base + personalizadas)
+        const todasActividades = [...CALENDARIO_CEIA, ...actividadesCEIAPersonalizadas];
+        await sheetsAPI('saveActividades', { actividades: todasActividades });
+        console.log('Actividades enviadas:', todasActividades.length);
+
+        updateSyncStatus('synced');
+    } catch (error) {
+        console.error('Error enviando datos iniciales:', error);
+        updateSyncStatus('error');
+        throw error;
+    }
+}
+
+// Guardar datos localmente y en Google Sheets
 function saveData() {
+    // Guardar en localStorage primero (instantáneo)
     localStorage.setItem('adp_metas', JSON.stringify(state.metas));
     localStorage.setItem('adp_hitos', JSON.stringify(state.hitos));
+
+    // Luego sincronizar con Google Sheets (asíncrono)
+    syncToSheets();
+}
+
+// Sincronizar hacia Google Sheets
+async function syncToSheets() {
+    try {
+        await sheetsAPI('saveAll', {
+            metas: state.metas,
+            hitos: state.hitos,
+            actividades: [...CALENDARIO_CEIA, ...actividadesCEIAPersonalizadas]
+        });
+        console.log('Datos guardados en Google Sheets');
+    } catch (error) {
+        console.error('Error guardando en Sheets:', error);
+        // Los datos ya están en localStorage como backup
+    }
+}
+
+// Guardar solo las actividades CEIA personalizadas
+function saveActividadesCEIA() {
+    localStorage.setItem('actividadesCEIA', JSON.stringify(actividadesCEIAPersonalizadas));
+
+    // Sincronizar con Sheets
+    syncActividadesToSheets();
+}
+
+async function syncActividadesToSheets() {
+    try {
+        await sheetsAPI('saveActividades', {
+            actividades: actividadesCEIAPersonalizadas
+        });
+    } catch (error) {
+        console.error('Error guardando actividades en Sheets:', error);
+    }
 }
 
 function generateId(prefix) {
@@ -86,6 +251,21 @@ function setupEventListeners() {
         state.currentYear = parseInt(e.target.value);
         updateYearDependentViews();
     });
+
+    // Botón de sincronización manual
+    const btnSync = document.getElementById('btnSyncManual');
+    if (btnSync) {
+        btnSync.addEventListener('click', async () => {
+            btnSync.classList.add('syncing');
+            try {
+                await syncFromSheets();
+                showNotification('✅ Sincronización completada', 'success');
+            } catch (error) {
+                showNotification('❌ Error de sincronización', 'error');
+            }
+            btnSync.classList.remove('syncing');
+        });
+    }
 
     // Filtros de metas
     document.getElementById('filterDimension').addEventListener('change', (e) => {

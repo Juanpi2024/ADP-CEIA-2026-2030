@@ -2384,3 +2384,92 @@ body::before {
         height: 24px;
     }
 }
+
+/* ============================================
+   Indicador de Sincronización
+   ============================================ */
+
+.sync-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-left: var(--spacing-md);
+}
+
+.sync-indicator {
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.sync-indicator.offline {
+    color: #888;
+}
+
+.sync-indicator.syncing {
+    color: #f0ad4e;
+    animation: pulse 1s infinite;
+}
+
+.sync-indicator.synced {
+    color: #5cb85c;
+}
+
+.sync-indicator.error {
+    color: #d9534f;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.btn-sync {
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+}
+
+.btn-sync svg {
+    width: 18px;
+    height: 18px;
+    color: var(--text-secondary);
+}
+
+.btn-sync:hover {
+    background: var(--gradient-primary);
+}
+
+.btn-sync:hover svg {
+    color: white;
+}
+
+.btn-sync.syncing svg {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
