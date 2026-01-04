@@ -122,26 +122,42 @@ async function syncFromSheets() {
     try {
         const data = await sheetsAPI('getAll');
 
-        // Si no hay datos en Sheets, enviar los datos locales (carga inicial)
-        const sheetsVacio = (!data.metas || data.metas.length === 0) &&
-            (!data.hitos || data.hitos.length === 0);
+        // Verificar si Sheets está completamente vacío
+        const metasEnSheets = data.metas && Array.isArray(data.metas) && data.metas.length > 0;
+        const hitosEnSheets = data.hitos && Array.isArray(data.hitos) && data.hitos.length > 0;
 
-        if (sheetsVacio) {
+        // Solo enviar datos iniciales si AMBOS están vacíos
+        if (!metasEnSheets && !hitosEnSheets) {
             console.log('Sheets vacío - enviando datos iniciales...');
             await enviarDatosIniciales();
             showNotification('📤 Datos iniciales enviados a Google Sheets', 'success');
             return;
         }
 
-        // Solo actualizar si hay datos en Sheets
-        if (data.metas && data.metas.length > 0) {
-            state.metas = data.metas;
+        // Solo actualizar metas si vienen datos válidos (con campos requeridos)
+        if (metasEnSheets && data.metas[0].id && data.metas[0].nombre) {
+            // Normalizar fechas (de ISO a YYYY-MM-DD)
+            state.metas = data.metas.map(meta => ({
+                ...meta,
+                fechaCumplimiento: normalizarFecha(meta.fechaCumplimiento)
+            }));
             localStorage.setItem('adp_metas', JSON.stringify(state.metas));
+            console.log('Metas cargadas desde Sheets:', data.metas.length);
+        } else {
+            console.log('Metas de Sheets inválidas, manteniendo datos locales');
         }
 
-        if (data.hitos && data.hitos.length > 0) {
-            state.hitos = data.hitos;
+        // Solo actualizar hitos si vienen datos válidos (con campos requeridos)
+        if (hitosEnSheets && data.hitos[0].id && data.hitos[0].titulo) {
+            // Normalizar fechas (de ISO a YYYY-MM-DD)
+            state.hitos = data.hitos.map(hito => ({
+                ...hito,
+                fecha: normalizarFecha(hito.fecha)
+            }));
             localStorage.setItem('adp_hitos', JSON.stringify(state.hitos));
+            console.log('Hitos cargados desde Sheets:', data.hitos.length);
+        } else {
+            console.log('Hitos de Sheets inválidos, manteniendo datos locales');
         }
 
         if (data.actividades && data.actividades.length > 0) {
@@ -187,6 +203,33 @@ async function enviarDatosIniciales() {
         updateSyncStatus('error');
         throw error;
     }
+}
+
+// Normalizar fecha de formato ISO a YYYY-MM-DD
+function normalizarFecha(fecha) {
+    if (!fecha) return fecha;
+
+    // Si ya está en formato YYYY-MM-DD, retornar tal cual
+    if (/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
+        return fecha;
+    }
+
+    // Si es formato ISO (2026-03-02T03:00:00.000Z), extraer solo la fecha
+    if (fecha.includes('T')) {
+        return fecha.split('T')[0];
+    }
+
+    // Intentar parsear como Date y formatear
+    try {
+        const d = new Date(fecha);
+        if (!isNaN(d.getTime())) {
+            return d.toISOString().split('T')[0];
+        }
+    } catch (e) {
+        console.warn('No se pudo normalizar fecha:', fecha);
+    }
+
+    return fecha;
 }
 
 // Guardar datos localmente y en Google Sheets
