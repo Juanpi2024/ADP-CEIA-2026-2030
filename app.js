@@ -126,11 +126,29 @@ async function syncFromSheets() {
         const metasEnSheets = data.metas && Array.isArray(data.metas) && data.metas.length > 0;
         const hitosEnSheets = data.hitos && Array.isArray(data.hitos) && data.hitos.length > 0;
 
-        // Solo enviar datos iniciales si AMBOS están vacíos
-        if (!metasEnSheets && !hitosEnSheets) {
-            console.log('Sheets vacío - enviando datos iniciales...');
+        // Detectar si Sheets tiene datos incompletos (menos de lo esperado)
+        const hitosEsperados = HITOS_INICIALES.length;
+        const metasEsperadas = METAS_INICIALES.length;
+        const datosIncompletos = (!metasEnSheets || !hitosEnSheets ||
+            (data.hitos && data.hitos.length < hitosEsperados) ||
+            (data.metas && data.metas.length < metasEsperadas));
+
+        // Si datos incompletos, usar datos de data.js y enviar a Sheets
+        if (datosIncompletos) {
+            console.log('Sheets incompleto - usando datos frescos de data.js...');
+            state.metas = JSON.parse(JSON.stringify(METAS_INICIALES));
+            state.hitos = JSON.parse(JSON.stringify(HITOS_INICIALES));
+            localStorage.setItem('adp_metas', JSON.stringify(state.metas));
+            localStorage.setItem('adp_hitos', JSON.stringify(state.hitos));
+
             await enviarDatosIniciales();
-            showNotification('📤 Datos iniciales enviados a Google Sheets', 'success');
+            showNotification('📤 Datos frescos enviados a Google Sheets', 'success');
+
+            // Re-renderizar con datos correctos
+            renderMetas();
+            updateDimensionSummary();
+            renderCalendar();
+            renderUpcomingEvents();
             return;
         }
 
