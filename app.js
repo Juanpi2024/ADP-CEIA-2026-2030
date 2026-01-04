@@ -2395,5 +2395,36 @@ renderCalendarioCEIA = function () {
 // Inicializar modal cuando cargue el DOM
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(initModalActividadCEIA, 250);
+    setTimeout(initModalAyuda, 300);
 });
+
+// ============================================
+// Modal de Ayuda / Manual de Usuario
+// ============================================
+
+function initModalAyuda() {
+    const btnAyuda = document.getElementById('btnAyuda');
+    const modalAyuda = document.getElementById('modalAyuda');
+    const closeBtn = document.getElementById('closeModalAyuda');
+
+    if (btnAyuda) {
+        btnAyuda.addEventListener('click', () => {
+            if (modalAyuda) modalAyuda.classList.add('active');
+        });
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            if (modalAyuda) modalAyuda.classList.remove('active');
+        });
+    }
+
+    if (modalAyuda) {
+        modalAyuda.addEventListener('click', (e) => {
+            if (e.target === modalAyuda) {
+                modalAyuda.classList.remove('active');
+            }
+        });
+    }
+}
 

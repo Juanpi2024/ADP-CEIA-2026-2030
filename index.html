@@ -800,6 +800,98 @@
         </div>
     </footer>
 
+    <!-- Botón Flotante de Ayuda -->
+    <button class="btn-help-float" id="btnAyuda" title="Manual de Usuario">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+        </svg>
+    </button>
+
+    <!-- Modal Manual de Usuario -->
+    <div class="modal-overlay" id="modalAyuda">
+        <div class="modal modal-large glass-card">
+            <div class="modal-header">
+                <h2>📘 Manual de Usuario</h2>
+                <button class="modal-close" id="closeModalAyuda" title="Cerrar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body manual-content">
+                <div class="manual-section">
+                    <h3>🎯 Navegación Principal</h3>
+                    <div class="manual-grid">
+                        <div class="manual-item">
+                            <span class="manual-icon">📊</span>
+                            <strong>Metas de Gestión</strong>
+                            <p>Ver y actualizar avance de cada meta del convenio</p>
+                        </div>
+                        <div class="manual-item">
+                            <span class="manual-icon">📅</span>
+                            <strong>Calendario de Hitos</strong>
+                            <p>Planificación anual de actividades administrativas</p>
+                        </div>
+                        <div class="manual-item">
+                            <span class="manual-icon">📈</span>
+                            <strong>Dashboard Ejecutivo</strong>
+                            <p>Resumen visual del cumplimiento y reportes</p>
+                        </div>
+                        <div class="manual-item">
+                            <span class="manual-icon">⭐</span>
+                            <strong>Calendario CEIA</strong>
+                            <p>Actividades diarias y evidencias ADP</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="manual-section">
+                    <h3>✏️ Actualizar Avance de Metas</h3>
+                    <ol class="manual-steps">
+                        <li>Ve a la pestaña <strong>"Metas de Gestión"</strong></li>
+                        <li>Haz clic en el <strong>ícono de lápiz</strong> ✏️ de la meta</li>
+                        <li>Modifica el <strong>porcentaje de avance</strong></li>
+                        <li>Guarda los cambios</li>
+                    </ol>
+                </div>
+
+                <div class="manual-section">
+                    <h3>⭐ Agregar Actividad como Evidencia ADP</h3>
+                    <ol class="manual-steps">
+                        <li>Ve a <strong>"Calendario CEIA"</strong></li>
+                        <li>Haz clic en <strong>"+ Nueva Actividad"</strong></li>
+                        <li>Completa título, fecha y tipo</li>
+                        <li>Marca ✅ <strong>"Esta actividad es evidencia para el ADP"</strong></li>
+                        <li>Selecciona la <strong>Dimensión</strong> y <strong>Meta relacionada</strong></li>
+                        <li>Guarda la actividad</li>
+                    </ol>
+                </div>
+
+                <div class="manual-section">
+                    <h3>📄 Generar Reportes</h3>
+                    <ol class="manual-steps">
+                        <li>Ve al <strong>"Dashboard Ejecutivo"</strong></li>
+                        <li>Baja hasta <strong>"Exportar Reportes"</strong></li>
+                        <li>Elige: <strong>PDF</strong>, <strong>Excel</strong> o <strong>Imprimir</strong></li>
+                    </ol>
+                </div>
+
+                <div class="manual-section tips-section">
+                    <h3>💡 Tips de Uso</h3>
+                    <ul class="manual-tips">
+                        <li>📌 Revise el Dashboard <strong>semanalmente</strong></li>
+                        <li>📌 Use el filtro <strong>"Solo Evidencias ADP"</strong> para revisar respaldos</li>
+                        <li>📌 Genere reportes PDF <strong>mensuales</strong> como respaldo</li>
+                        <li>📌 Sincronice actividades CEIA con el calendario de hitos</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="data.js"></script>
     <script src="app.js"></script>
 </body>

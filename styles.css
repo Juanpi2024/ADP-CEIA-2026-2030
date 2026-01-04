@@ -2243,3 +2243,144 @@ body::before {
 .ceia-filters .btn-primary {
     margin-left: 0;
 }
+
+/* ============================================
+   Botón Flotante de Ayuda
+   ============================================ */
+
+.btn-help-float {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-full);
+    background: var(--gradient-primary);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+    transition: var(--transition-normal);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-help-float svg {
+    width: 28px;
+    height: 28px;
+    color: white;
+}
+
+.btn-help-float:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 30px rgba(102, 126, 234, 0.6);
+}
+
+/* ============================================
+   Modal Manual de Usuario
+   ============================================ */
+
+.manual-content {
+    max-height: 70vh;
+    overflow-y: auto;
+    padding: var(--spacing-lg);
+}
+
+.manual-section {
+    margin-bottom: var(--spacing-xl);
+}
+
+.manual-section h3 {
+    color: var(--accent-blue);
+    margin-bottom: var(--spacing-md);
+    font-size: 1.2rem;
+    border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+    padding-bottom: var(--spacing-sm);
+}
+
+.manual-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+}
+
+.manual-item {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    text-align: center;
+}
+
+.manual-item .manual-icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: var(--spacing-sm);
+}
+
+.manual-item strong {
+    color: var(--text-primary);
+    display: block;
+    margin-bottom: var(--spacing-xs);
+}
+
+.manual-item p {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.manual-steps {
+    list-style: decimal;
+    padding-left: var(--spacing-lg);
+    color: var(--text-secondary);
+}
+
+.manual-steps li {
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.6;
+}
+
+.manual-steps strong {
+    color: var(--accent-cyan);
+}
+
+.tips-section {
+    background: rgba(255, 215, 0, 0.1);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.manual-tips {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.manual-tips li {
+    margin-bottom: var(--spacing-sm);
+    color: var(--text-secondary);
+}
+
+.manual-tips strong {
+    color: #ffd700;
+}
+
+@media (max-width: 768px) {
+    .manual-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-help-float {
+        bottom: 20px;
+        right: 20px;
+        width: 48px;
+        height: 48px;
+    }
+
+    .btn-help-float svg {
+        width: 24px;
+        height: 24px;
+    }
+}
