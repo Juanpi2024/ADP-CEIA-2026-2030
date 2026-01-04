@@ -834,9 +834,9 @@ body::before {
 }
 
 .calendar-day {
-    aspect-ratio: 1;
-    min-height: 64px;
-    padding: var(--spacing-sm);
+    aspect-ratio: 1.2;
+    min-height: 80px;
+    padding: 4px;
     background: var(--glass-bg);
     border: 1px solid transparent;
     border-radius: var(--radius-sm);
@@ -872,22 +872,24 @@ body::before {
 }
 
 .day-number {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: 600;
-    margin-bottom: var(--spacing-xs);
+    margin-bottom: 2px;
+    opacity: 0.8;
 }
 
 .day-events {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 1px;
     overflow: hidden;
 }
 
 .day-event {
-    font-size: 0.72rem;
-    padding: 2px 4px;
+    font-size: 0.65rem;
+    padding: 1px 3px;
+    line-height: 1.2;
     border-radius: 3px;
     white-space: nowrap;
     overflow: hidden;

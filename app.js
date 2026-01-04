@@ -763,18 +763,28 @@ function renderCalendar() {
             today.getMonth() === state.currentMonth &&
             today.getDate() === day;
 
-        const dayEvents = state.hitos.filter(h => h.fecha === dateStr);
+        // Obtener eventos del día y eliminar posibles duplicados visuales (mismo título y fecha)
+        const dayEventsRaw = state.hitos.filter(h => h.fecha === dateStr);
+        const dayEvents = [];
+        const seenTitles = new Set();
+
+        dayEventsRaw.forEach(e => {
+            if (!seenTitles.has(e.titulo)) {
+                dayEvents.push(e);
+                seenTitles.add(e.titulo);
+            }
+        });
 
         html += `
             <div class="calendar-day ${isToday ? 'today' : ''}" data-date="${dateStr}">
                 <span class="day-number">${day}</span>
                 <div class="day-events">
-                    ${dayEvents.slice(0, 3).map(e => `
-                        <div class="day-event ${e.categoria}" title="${e.titulo}">
+                    ${dayEvents.slice(0, 5).map(e => `
+                        <div class="day-event ${e.categoria || (e.tipo === 'consejo' ? 'informe' : e.tipo) || ''}" title="${e.titulo}">
                             ${e.titulo}
                         </div>
                     `).join('')}
-                    ${dayEvents.length > 3 ? `<div class="day-event" style="background: #888">+${dayEvents.length - 3} más</div>` : ''}
+                    ${dayEvents.length > 5 ? `<div class="day-event" style="background: #888; font-size: 0.6rem; padding: 0 2px;">+${dayEvents.length - 5} más</div>` : ''}
                 </div>
             </div>
         `;
