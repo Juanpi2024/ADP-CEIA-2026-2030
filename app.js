@@ -2650,32 +2650,173 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ============================================
-// Modal de Ayuda / Manual de Usuario
+// Reporte de Monitoreo ADP Imprimible
 // ============================================
 
-function initModalAyuda() {
-    const btnAyuda = document.getElementById('btnAyuda');
-    const modalAyuda = document.getElementById('modalAyuda');
-    const closeBtn = document.getElementById('closeModalAyuda');
-
-    if (btnAyuda) {
-        btnAyuda.addEventListener('click', () => {
-            if (modalAyuda) modalAyuda.classList.add('active');
-        });
-    }
-
-    if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-            if (modalAyuda) modalAyuda.classList.remove('active');
-        });
-    }
-
-    if (modalAyuda) {
-        modalAyuda.addEventListener('click', (e) => {
-            if (e.target === modalAyuda) {
-                modalAyuda.classList.remove('active');
-            }
-        });
+function initADPPrinting() {
+    const btnADPPrint = document.getElementById('btnADPPrint');
+    if (btnADPPrint) {
+        btnADPPrint.addEventListener('click', generateADPReport);
     }
 }
+
+/**
+ * Genera el reporte de monitoreo ADP optimizado para impresión
+ */
+function generateADPReport() {
+    const container = document.getElementById('pmePrintContainer');
+    if (!container) return;
+
+    // Limpiar contenedor
+    container.innerHTML = '';
+
+    // Obtener las dimensiones (áreas) que tienen metas
+    const dimensionesConMetas = Object.keys(DIMENSIONES).filter(dimId => 
+        state.metas.some(m => m.dimension === dimId)
+    );
+
+    let reportHTML = '';
+
+    dimensionesConMetas.forEach(dimId => {
+        const dimension = DIMENSIONES[dimId];
+        const metasDim = state.metas.filter(m => m.dimension === dimId);
+        
+        // Filtrar hitos/actividades relacionados con esta dimensión
+        // Pueden estar vinculados por metaRelacionada o por dimensionADP en CALENDARIO_CEIA
+        const actividadesDim = [...state.hitos, ...CALENDARIO_CEIA, ...actividadesCEIAPersonalizadas].filter(act => {
+            // Si es un hito de metas (state.hitos), no siempre tienen dimensión directa, 
+            // pero podemos buscarlos por su relación lógica o fecha si fuera necesario.
+            // Para CALENDARIO_CEIA usamos dimensionADP.
+            if (act.dimensionADP === dimId) return true;
+            
+            // Si el hito está vinculado a una meta de esta dimensión
+            if (act.metaRelacionada) {
+                const metaAsociada = state.metas.find(m => m.id === act.metaRelacionada);
+                if (metaAsociada && metaAsociada.dimension === dimId) return true;
+            }
+            
+            return false;
+        });
+
+        // Ordenar actividades por fecha
+        actividadesDim.sort((a, b) => new Date(a.fecha || a.fechaCumplimiento) - new Date(b.fecha || b.fechaCumplimiento));
+
+        reportHTML += `
+            <div class="pme-report-page">
+                <header class="pme-report-header">
+                    <div>
+                        <h1>Ficha de Monitoreo Convenio ADP</h1>
+                        <p style="margin: 5px 0 0 0; color: #444;">Área: <strong>${dimension.nombre.toUpperCase()}</strong></p>
+                    </div>
+                    <div style="text-align: right;">
+                        <p style="margin: 0; font-size: 9pt;">Convenio 2026-2030</p>
+                        <p style="margin: 0; font-size: 9pt;">Fecha Reporte: ${new Date().toLocaleDateString()}</p>
+                    </div>
+                </header>
+
+                <div class="pme-info-grid">
+                    <div class="pme-info-item">
+                        <span class="pme-info-label">Establecimiento</span>
+                        <span class="pme-info-value">Escuela Juanita Zúñiga CEIA</span>
+                    </div>
+                    <div class="pme-info-item">
+                        <span class="pme-info-label">Director</span>
+                        <span class="pme-info-value">Juan José Araya Chandía</span>
+                    </div>
+                    <div class="pme-info-item">
+                        <span class="pme-info-label">Año Escolar</span>
+                        <span class="pme-info-value">${state.currentYear}</span>
+                    </div>
+                    <div class="pme-info-item">
+                        <span class="pme-info-label">Estado de Avance Área</span>
+                        <span class="pme-info-value">${calculateAreaProgress(dimId)}%</span>
+                    </div>
+                </div>
+
+                <div class="pme-section-title">1. RESUMEN DE METAS DE GESTIÓN</div>
+                <table class="pme-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 50%;">Meta / Indicador</th>
+                            <th style="width: 15%; text-align: center;">Ponderación</th>
+                            <th style="width: 15%; text-align: center;">Avance</th>
+                            <th style="width: 20%; text-align: center;">Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${metasDim.map(m => `
+                            <tr>
+                                <td>
+                                    <strong>${m.nombre}</strong><br>
+                                    <span style="font-size: 8pt; color: #555;">${m.indicador}</span>
+                                </td>
+                                <td style="text-align: center;">${m.ponderacion}%</td>
+                                <td style="text-align: center;">${m.avance}%</td>
+                                <td style="text-align: center;">
+                                    <span class="pme-status-badge">${ESTADOS[m.estado].nombre}</span>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+
+                <div class="pme-section-title">2. SEGUIMIENTO DE ACTIVIDADES E HITOS</div>
+                <table class="pme-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;">Fecha</th>
+                            <th style="width: 55%;">Actividad / Hito</th>
+                            <th style="width: 15%; text-align: center;">Evidencia</th>
+                            <th style="width: 15%; text-align: center;">Validación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${actividadesDim.length > 0 ? actividadesDim.map(a => `
+                            <tr>
+                                <td>${formatDate(a.fecha || a.fechaCumplimiento)}</td>
+                                <td>${a.titulo}</td>
+                                <td style="text-align: center;">${a.esEvidenciaADP ? 'SÍ' : 'NO'}</td>
+                                <td style="border: 1px solid #ccc; width: 60px;"></td>
+                            </tr>
+                        `).join('') : '<tr><td colspan="4" style="text-align: center;">No hay actividades registradas para esta área.</td></tr>'}
+                    </tbody>
+                </table>
+
+                <div class="pme-section-title">3. OBSERVACIONES Y RETROALIMENTACIÓN</div>
+                <div class="pme-notes-area"></div>
+
+                <div class="pme-signature-section">
+                    <div class="signature-box">
+                        Firma Responsable de Área
+                    </div>
+                    <div class="signature-box">
+                        Firma Dirección / Visto Bueno
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = reportHTML;
+
+    // Ejecutar impresión
+    setTimeout(() => {
+        window.print();
+    }, 500);
+}
+
+/**
+ * Calcula el progreso de una dimensión específica
+ */
+function calculateAreaProgress(dimId) {
+    const metasDimension = state.metas.filter(m => m.dimension === dimId);
+    const totalPonderacion = metasDimension.reduce((sum, m) => sum + m.ponderacion, 0);
+    const avancePonderado = metasDimension.reduce((sum, m) => sum + (m.avance * m.ponderacion / 100), 0);
+    return totalPonderacion > 0 ? Math.round((avancePonderado / totalPonderacion) * 100) : 0;
+}
+
+// Llamar a la inicialización en DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
+    initADPPrinting();
+});
 

@@ -3,7 +3,11 @@
    Tema Oscuro Premium con Glassmorphism
    ============================================ */
 
-/* Variables CSS */
+.print-only {
+    display: none;
+}
+
+/* Variables del Sistema */
 :root {
     /* Colores principales */
     --bg-primary: #0a0a1a;
@@ -2473,5 +2477,154 @@ body::before {
 
     to {
         transform: rotate(360deg);
+    }
+}
+
+/* ==========================================================================
+   ESTILOS DE IMPRESIÓN (PME)
+   ========================================================================== */
+@media print {
+    /* Ocultar todo el sitio principal */
+    body * {
+        visibility: hidden;
+    }
+
+    /* Mostrar solo el contenedor de impresión */
+    #pmePrintContainer, #pmePrintContainer * {
+        visibility: visible;
+    }
+
+    #pmePrintContainer {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        display: block !important;
+        background: white !important;
+        color: black !important;
+        padding: 0;
+        margin: 0;
+    }
+
+    /* Reset de márgenes y fondos */
+    @page {
+        margin: 1.5cm;
+        size: A4;
+    }
+
+    .glass-card {
+        background: white !important;
+        border: 1px solid #ddd !important;
+        box-shadow: none !important;
+        -webkit-backdrop-filter: none !important;
+        backdrop-filter: none !important;
+    }
+
+    /* Estructura del Reporte */
+    .pme-report-page {
+        page-break-after: always;
+        font-family: 'Inter', sans-serif;
+        color: black;
+    }
+
+    .pme-report-header {
+        border-bottom: 2px solid #333;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+
+    .pme-report-header h1 {
+        font-size: 20pt;
+        margin: 0;
+        color: #000;
+    }
+
+    .pme-info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .pme-info-item {
+        border-bottom: 1px solid #eee;
+        padding: 5px 0;
+    }
+
+    .pme-info-label {
+        font-weight: bold;
+        font-size: 9pt;
+        color: #666;
+        display: block;
+    }
+
+    .pme-info-value {
+        font-size: 11pt;
+        color: #000;
+    }
+
+    .pme-section-title {
+        background: #f4f4f4 !important;
+        padding: 8px 12px;
+        font-size: 12pt;
+        font-weight: bold;
+        margin: 20px 0 10px 0;
+        border-left: 4px solid #333;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    /* Tablas de Reporte */
+    .pme-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        font-size: 10pt;
+    }
+
+    .pme-table th {
+        background: #eee !important;
+        text-align: left;
+        padding: 8px;
+        border: 1px solid #ddd;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .pme-table td {
+        padding: 8px;
+        border: 1px solid #ddd;
+        vertical-align: top;
+    }
+
+    .pme-status-badge {
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 8pt;
+    }
+
+    /* Sección de Firmas */
+    .pme-signature-section {
+        margin-top: 50px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 50px;
+    }
+
+    .signature-box {
+        border-top: 1px solid #000;
+        text-align: center;
+        padding-top: 10px;
+        font-size: 10pt;
+    }
+
+    .pme-notes-area {
+        height: 120px;
+        border: 1px solid #ddd;
+        margin-top: 10px;
+        background: white;
     }
 }
