@@ -14,7 +14,7 @@ Este panel le permite monitorear el avance de su Convenio de Desempeño ADP, ges
 
 El panel cuenta con **4 pestañas**:
 
-![Navegación del panel](C:/Users/Casa/.gemini/antigravity/brain/68864843-064c-481d-a4ec-09665089fbf2/dashboard_tab_1767491055150.png)
+![Navegación del panel](./assets/images/dashboard_tab.png)
 
 | Pestaña | Función |
 |---------|---------|
@@ -46,7 +46,7 @@ Baje hasta la sección **"Exportar Reportes"**:
 
 ## 2. Metas de Gestión
 
-![Metas de Gestión](C:/Users/Casa/.gemini/antigravity/brain/68864843-064c-481d-a4ec-09665089fbf2/metas_gestion_tab_1767491083682.png)
+![Metas de Gestión](./assets/images/metas_gestion_tab.png)
 
 ### Ver Metas
 
@@ -72,7 +72,7 @@ Use los selectores superiores para filtrar por:
 
 Visualice y planifique sus actividades administrativas:
 
-![Calendario de Hitos](C:/Users/Casa/.gemini/antigravity/brain/68864843-064c-481d-a4ec-09665089fbf2/calendario_hitos_tab_1767491123365.png)
+![Calendario de Hitos](./assets/images/calendario_hitos_tab.png)
 
 ### Agregar Hito
 
@@ -93,7 +93,7 @@ Visualice y planifique sus actividades administrativas:
 
 **El más importante para gestionar evidencias del ADP.**
 
-![Calendario CEIA](C:/Users/Casa/.gemini/antigravity/brain/68864843-064c-481d-a4ec-09665089fbf2/calendario_ceia_tab_top_1767491174010.png)
+![Calendario CEIA](./assets/images/calendario_ceia_tab_top.png)
 
 ### Agregar Nueva Actividad como Evidencia
 
