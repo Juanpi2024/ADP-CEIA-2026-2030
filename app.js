@@ -97,20 +97,37 @@ function initializeApp() {
 // ============================================
 
 function loadData() {
-    // Primero cargar desde localStorage como fallback rápido
-    const savedMetas = localStorage.getItem('adp_metas');
-    const savedHitos = localStorage.getItem('adp_hitos');
+    // Comprobar si data.js fue actualizado (nueva versión)
+    const savedVersion = localStorage.getItem('adp_data_version');
+    const versionChanged = (typeof DATA_VERSION !== 'undefined') && savedVersion !== DATA_VERSION;
 
-    if (savedMetas) {
-        state.metas = JSON.parse(savedMetas);
-    } else {
+    if (versionChanged) {
+        console.log(`🔄 Nueva versión de datos detectada (${savedVersion} → ${DATA_VERSION}). Recargando desde data.js...`);
+        // Limpiar caché viejo y forzar datos frescos
+        localStorage.removeItem('adp_metas');
+        localStorage.removeItem('adp_hitos');
         state.metas = JSON.parse(JSON.stringify(METAS_INICIALES));
-    }
-
-    if (savedHitos) {
-        state.hitos = JSON.parse(savedHitos);
-    } else {
         state.hitos = JSON.parse(JSON.stringify(HITOS_INICIALES));
+        // Guardar la nueva versión y los datos frescos
+        localStorage.setItem('adp_data_version', DATA_VERSION);
+        localStorage.setItem('adp_metas', JSON.stringify(state.metas));
+        localStorage.setItem('adp_hitos', JSON.stringify(state.hitos));
+    } else {
+        // Cargar desde localStorage como siempre
+        const savedMetas = localStorage.getItem('adp_metas');
+        const savedHitos = localStorage.getItem('adp_hitos');
+
+        if (savedMetas) {
+            state.metas = JSON.parse(savedMetas);
+        } else {
+            state.metas = JSON.parse(JSON.stringify(METAS_INICIALES));
+        }
+
+        if (savedHitos) {
+            state.hitos = JSON.parse(savedHitos);
+        } else {
+            state.hitos = JSON.parse(JSON.stringify(HITOS_INICIALES));
+        }
     }
 
     // Luego intentar sincronizar con Google Sheets

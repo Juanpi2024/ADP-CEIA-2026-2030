@@ -3,6 +3,9 @@
  * Convenio de Desempeño Director - CEIA 2026-2030
  */
 
+// Versión de datos — al cambiar, la app recarga desde data.js en vez de localStorage
+const DATA_VERSION = '2026-05-27-v2';
+
 // Configuración de dimensiones del convenio
 const DIMENSIONES = {
     pedagogica: {
