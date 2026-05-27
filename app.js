@@ -139,6 +139,31 @@ async function syncFromSheets() {
     try {
         const data = await sheetsAPI('getAll');
 
+        // === VERIFICACIÓN DE VERSIÓN ===
+        // Si DATA_VERSION cambió, los datos de data.js son más recientes que Sheets.
+        // Forzar envío de datos frescos a Sheets y NO cargar desde Sheets.
+        const savedVersion = localStorage.getItem('adp_data_version');
+        const versionChanged = (typeof DATA_VERSION !== 'undefined') && savedVersion !== DATA_VERSION;
+
+        if (versionChanged) {
+            console.log(`🔄 DATA_VERSION cambió (${savedVersion} → ${DATA_VERSION}). Enviando datos frescos a Sheets...`);
+            state.metas = JSON.parse(JSON.stringify(METAS_INICIALES));
+            state.hitos = JSON.parse(JSON.stringify(HITOS_INICIALES));
+            localStorage.setItem('adp_data_version', DATA_VERSION);
+            localStorage.setItem('adp_metas', JSON.stringify(state.metas));
+            localStorage.setItem('adp_hitos', JSON.stringify(state.hitos));
+
+            await enviarDatosIniciales();
+            showNotification('📤 Avances actualizados enviados a Google Sheets', 'success');
+
+            // Re-renderizar con datos correctos
+            renderMetas();
+            updateDimensionSummary();
+            renderCalendar();
+            renderUpcomingEvents();
+            return;
+        }
+
         // Verificar si Sheets está completamente vacío
         const metasEnSheets = data.metas && Array.isArray(data.metas) && data.metas.length > 0;
         const hitosEnSheets = data.hitos && Array.isArray(data.hitos) && data.hitos.length > 0;
