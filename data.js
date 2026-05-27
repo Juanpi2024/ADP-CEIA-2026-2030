@@ -86,8 +86,8 @@ const METAS_INICIALES = [
         nombre: 'Talleres de Desarrollo Profesional',
         indicador: 'Número de talleres incorporando estrategias innovadoras y efectivas al desarrollo profesional interno de los/as docentes. Realizar 2 talleres semestrales.',
         ponderacion: 6,
-        avance: 0,
-        estado: 'pendiente',
+        avance: 50,
+        estado: 'progreso',
         fechaCumplimiento: '2026-12-15',
         mediosVerificacion: 'Copia de planificación del taller indicando: Objetivo, Responsable del taller, Quiénes participan, Actividades realizadas, Firmas y fecha, Material utilizado.',
         metaAnual: {
@@ -104,8 +104,8 @@ const METAS_INICIALES = [
         nombre: 'Reflexiones Pedagógicas',
         indicador: 'Número de reflexiones pedagógicas programadas por semestre para el trabajo colaborativo, intercambio de experiencias y estrategias efectivas. Realizar al menos 2 reflexiones mensuales.',
         ponderacion: 6,
-        avance: 0,
-        estado: 'pendiente',
+        avance: 50,
+        estado: 'progreso',
         fechaCumplimiento: '2026-12-15',
         mediosVerificacion: 'Copia de planificación de la reflexión pedagógica indicando: Objetivo, Responsable, Quiénes participan, Actividades realizadas, Firmas y fecha, Material utilizado.',
         metaAnual: {
@@ -124,8 +124,8 @@ const METAS_INICIALES = [
         nombre: 'Plan de Capacitaciones',
         indicador: 'Diseñar un plan de trabajo con número de capacitaciones, talleres de reflexión, fechas tentativas, acciones y evaluación. Implementar Plan con mínimo 2 capacitaciones y 2 talleres anuales.',
         ponderacion: 4.5,
-        avance: 0,
-        estado: 'pendiente',
+        avance: 50,
+        estado: 'progreso',
         fechaCumplimiento: '2026-12-15',
         mediosVerificacion: 'Copia del Plan de trabajo indicando: Objetivo, Responsables, Participantes, N° talleres o capacitaciones, Temas tratados, Fechas, Firmas participantes.',
         metaAnual: {
@@ -142,8 +142,8 @@ const METAS_INICIALES = [
         nombre: 'Capacitaciones en Convivencia',
         indicador: 'Número de capacitaciones con docentes y asistentes sobre temáticas: convivencia escolar y políticas públicas en educación. Realizar como mínimo 2 capacitaciones anuales.',
         ponderacion: 6,
-        avance: 0,
-        estado: 'pendiente',
+        avance: 50,
+        estado: 'progreso',
         fechaCumplimiento: '2026-12-15',
         mediosVerificacion: 'Copia del informe de planificación indicando: Objetivo, Responsables, Participantes, N° capacitaciones, Temas tratados, Fechas, Firmas participantes.',
         metaAnual: {
@@ -160,8 +160,8 @@ const METAS_INICIALES = [
         nombre: 'Reuniones con Organizaciones',
         indicador: 'Número de reuniones con organizaciones externas e internas para promover la participación activa. Realizar como mínimo 2 reuniones por semestre.',
         ponderacion: 4.5,
-        avance: 0,
-        estado: 'pendiente',
+        avance: 50,
+        estado: 'progreso',
         fechaCumplimiento: '2026-12-15',
         mediosVerificacion: 'Copia de la planificación indicando: Objetivo Reunión, N° de actividades, Responsables, Participantes, Temas tratados, Fechas, Firmas participantes.',
         metaAnual: {
@@ -180,8 +180,8 @@ const METAS_INICIALES = [
         nombre: 'Planificación Directiva',
         indicador: 'Número de planificaciones del director donde organice y distribuya tiempos para tareas administrativas y pedagógicas: formación de equipos, avance PEI, metas PME, objetivos de aprendizaje, cumplimiento normativo.',
         ponderacion: 10,
-        avance: 0,
-        estado: 'pendiente',
+        avance: 50,
+        estado: 'progreso',
         fechaCumplimiento: '2026-12-15',
         mediosVerificacion: '1. Copia de la planificación indicando tareas administrativas y pedagógicas, distribución de tiempo, responsables, fechas.\n2. Copia del informe de reunión técnica de evaluación semestral.',
         metaAnual: {
@@ -198,8 +198,8 @@ const METAS_INICIALES = [
         nombre: 'Talleres de Altas Expectativas',
         indicador: 'Número de talleres semestrales sobre: cultura de altas expectativas, discusiones técnicas compartiendo desafíos pedagógicos, análisis de dificultades estableciendo procedimientos preventivos.',
         ponderacion: 6,
-        avance: 0,
-        estado: 'pendiente',
+        avance: 25,
+        estado: 'progreso',
         fechaCumplimiento: '2026-12-15',
         mediosVerificacion: 'Copia de la planificación de los talleres indicando: N° de talleres programados, Objetivo, Responsable, Tema, Nombre y firma de participantes, Fecha.',
         metaAnual: {
@@ -216,8 +216,8 @@ const METAS_INICIALES = [
         nombre: 'Revisión del PEI',
         indicador: 'Número de sesiones para la revisión y análisis del Proyecto Educativo Institucional. Realizar al menos 1 sesión por semestre.',
         ponderacion: 4,
-        avance: 0,
-        estado: 'pendiente',
+        avance: 50,
+        estado: 'progreso',
         fechaCumplimiento: '2026-12-15',
         mediosVerificacion: 'Copia del informe de la sesión indicando: Participantes, Fecha/firmas, Quién dirige la sesión, Áreas de mejora, Acciones correctivas, Impacto en la gestión educativa.',
         metaAnual: {
@@ -236,8 +236,8 @@ const METAS_INICIALES = [
         nombre: 'Talleres de Convivencia',
         indicador: 'Número de talleres donde se implementen acciones para fortalecer los lazos de la comunidad educativa: encuentros familia-escuela, autocuidado y salud mental, valoración a la diversidad e inclusión.',
         ponderacion: 8,
-        avance: 0,
-        estado: 'pendiente',
+        avance: 50,
+        estado: 'progreso',
         fechaCumplimiento: '2026-12-15',
         mediosVerificacion: 'Copia de la planificación de los talleres indicando: Nombre del taller, Acciones implementadas, Actividades realizadas, Responsable, Quiénes participan, Fechas de ejecución, Nómina de asistentes, Material utilizado.',
         metaAnual: {
@@ -254,8 +254,8 @@ const METAS_INICIALES = [
         nombre: 'Indicadores de Desarrollo Personal',
         indicador: 'Subir o mantener los porcentajes de los indicadores de desarrollo personal y social: Autoestima y motivación escolar (60%), Clima convivencia escolar (60%), Participación y formación ciudadana (60%).',
         ponderacion: 6,
-        avance: 0,
-        estado: 'pendiente',
+        avance: 15,
+        estado: 'progreso',
         fechaCumplimiento: '2026-12-15',
         mediosVerificacion: '1. Copia de la encuesta realizada por cada indicador.\n2. Porcentaje de resultados.\n3. Copia del informe indicando universo de encuestados y reflexión sobre resultados.',
         metaAnual: {
@@ -272,8 +272,8 @@ const METAS_INICIALES = [
         nombre: 'Talleres de Temas de Convivencia',
         indicador: 'Número de talleres de trabajo relacionados con los indicadores y temas de convivencia escolar. Realizar al menos 2 talleres con temas de convivencia escolar por semestre.',
         ponderacion: 6,
-        avance: 0,
-        estado: 'pendiente',
+        avance: 50,
+        estado: 'progreso',
         fechaCumplimiento: '2026-12-15',
         mediosVerificacion: 'Copia de informe indicando: Objetivo, Tema a trabajar, Quien realiza el taller, Actividades, N° participantes / firmas, Fecha.',
         metaAnual: {
@@ -292,8 +292,8 @@ const METAS_INICIALES = [
         nombre: 'Matrícula y Asistencia',
         indicador: 'Aumentar progresivamente el porcentaje del indicador de eficiencia interna matrícula y asistencia. Matrícula: ≥ 136 estudiantes. Asistencia: ≥ 60%.',
         ponderacion: 6.25,
-        avance: 0,
-        estado: 'pendiente',
+        avance: 25,
+        estado: 'progreso',
         fechaCumplimiento: '2026-12-15',
         mediosVerificacion: '1. Copia de los Registros, bases de datos o índices del establecimiento.\n2. Informes de la Superintendencia de Educación Escolar y de la Agencia de Calidad de la Educación.',
         metaAnual: {
@@ -310,8 +310,8 @@ const METAS_INICIALES = [
         nombre: 'Promoción y Repitencia',
         indicador: 'Aumentar progresivamente el porcentaje de promoción y disminuir indicador de repitencia. Promoción: ≥ 64.3%. Repitencia: ≤ 10%.',
         ponderacion: 6.25,
-        avance: 0,
-        estado: 'pendiente',
+        avance: 25,
+        estado: 'progreso',
         fechaCumplimiento: '2026-12-15',
         mediosVerificacion: '1. Copia de los Registros, bases de datos o índices del establecimiento.\n2. Informes de la Superintendencia de Educación Escolar y de la Agencia de Calidad de la Educación.',
         metaAnual: {
@@ -328,8 +328,8 @@ const METAS_INICIALES = [
         nombre: 'Aprobación Lenguaje',
         indicador: 'Porcentaje de aprobación de estudiantes en Comprensión de Lectura asignatura de lenguaje y literatura. Subir o mantener la aprobación del 85%.',
         ponderacion: 5,
-        avance: 0,
-        estado: 'pendiente',
+        avance: 25,
+        estado: 'progreso',
         fechaCumplimiento: '2026-12-15',
         mediosVerificacion: '1. Copia de los Registros, bases de datos o índices del establecimiento.\n2. Informes de la Superintendencia de Educación Escolar y de la Agencia de Calidad de la Educación.',
         metaAnual: {
@@ -346,8 +346,8 @@ const METAS_INICIALES = [
         nombre: 'Aprobación Matemática',
         indicador: 'Porcentaje de aprobación de estudiantes en asignatura de Matemática. Subir o mantener la aprobación del 82%.',
         ponderacion: 7.5,
-        avance: 0,
-        estado: 'pendiente',
+        avance: 25,
+        estado: 'progreso',
         fechaCumplimiento: '2026-12-15',
         mediosVerificacion: '1. Copia de los Registros, bases de datos o índices del establecimiento.\n2. Informes de la Superintendencia de Educación Escolar y de la Agencia de Calidad de la Educación.',
         metaAnual: {
@@ -457,11 +457,11 @@ const HITOS_INICIALES = [
     },
     {
         id: 'hito-12',
-        titulo: 'Visita DAEM - Seguimiento',
+        titulo: 'Visita SLEP Los Álamos - Seguimiento',
         descripcion: 'Primera visita anual del sostenedor para seguimiento de avances.',
         fecha: '2026-07-24',
         categoria: 'evaluacion',
-        responsable: 'DAEM - Director'
+        responsable: 'SLEP Los Álamos - Director'
     },
 
     // Cuarto Trimestre (Inicio Segundo Semestre)
@@ -533,11 +533,11 @@ const HITOS_INICIALES = [
     },
     {
         id: 'hito-21',
-        titulo: 'Visita DAEM - Seguimiento Final',
+        titulo: 'Visita SLEP Los Álamos - Seguimiento Final',
         descripcion: 'Segunda visita anual del sostenedor para seguimiento de avances.',
         fecha: '2026-11-25',
         categoria: 'evaluacion',
-        responsable: 'DAEM - Director'
+        responsable: 'SLEP Los Álamos - Director'
     },
 
     // Cierre Anual
@@ -607,10 +607,10 @@ const EVOLUCION_TRIMESTRAL = {
 // Información del convenio
 const INFO_CONVENIO = {
     titulo: 'Convenio de Desempeño Director',
-    establecimiento: 'Escuela Juanita Zúñiga CEIA',
-    comuna: 'Parral',
+    establecimiento: 'CEIA Juanita Zúñiga Fuentes',
+    comuna: 'Los Álamos',
     region: 'Maule',
-    sostenedor: 'Ilustre Municipalidad de Parral',
+    sostenedor: 'SLEP Los Álamos',
     director: 'Juan José Araya Chandía',
     rutDirector: '12.545.717-7',
     decretoNombramiento: 'Decreto Afecto N° 02513 de diciembre de 2025',
@@ -667,7 +667,8 @@ const CALENDARIO_CEIA = [
     { id: 'ceia-23', fecha: '2026-04-02', titulo: 'Día Mundial Concienciación Autismo (PIE)', tipo: 'celebracion', esEvidenciaADP: true, dimensionADP: 'convivencia' },
     { id: 'ceia-24', fecha: '2026-04-03', titulo: 'Feriado (Viernes Santo)', tipo: 'feriado', esEvidenciaADP: false },
     { id: 'ceia-25', fecha: '2026-04-06', titulo: 'Inicio 1° Revisión de notas (Unidad 0)', tipo: 'evaluacion', esEvidenciaADP: true, dimensionADP: 'resultados' },
-    { id: 'ceia-26', fecha: '2026-04-09', titulo: 'Consejo de Profesores: Técnico Pedagógico', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'pedagogica' },
+    { id: 'ceia-26', fecha: '2026-04-09', titulo: 'Consejo de Profesores: Técnico Pedagógico (Capacitación SAAT)', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-2' },
+    { id: 'ceia-nuevo-4', fecha: '2026-04-14', titulo: 'Consejo de Profesores: Autocuidado y Capacitación IA - DPD', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-3' },
     { id: 'ceia-27', fecha: '2026-04-16', titulo: 'Jornada de Revisión Reglamento Interno', tipo: 'administrativo', esEvidenciaADP: true, dimensionADP: 'liderazgo' },
     { id: 'ceia-28', fecha: '2026-04-20', titulo: 'Inicio Exámenes validación alumnas TP', tipo: 'evaluacion', esEvidenciaADP: true, dimensionADP: 'resultados' },
     { id: 'ceia-29', fecha: '2026-04-23', titulo: 'Día Mundial del Libro y Derecho de Autor', tipo: 'celebracion', esEvidenciaADP: false },

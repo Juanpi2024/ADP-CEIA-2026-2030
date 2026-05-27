@@ -1,6 +1,6 @@
 # Manual de Usuario - Panel de Gestión ADP
 
-## CEIA Juanita Zúñiga de Morales 2026-2030
+## CEIA Juanita Zúñiga Fuentes 2026-2030
 
 ---
 
@@ -140,4 +140,4 @@ Para soporte técnico o sugerencias de mejora, contacte al desarrollador.
 ---
 
 *Convenio de Desempeño - Ley 20.501*  
-*DAEM Ilustre Municipalidad de Parral*
+*SLEP Los Álamos*

@@ -2164,7 +2164,7 @@ function generarReportePDF() {
 
     <div class="footer">
         <p><strong>Convenio de Desempeño - Ley 20.501</strong></p>
-        <p>DAEM Ilustre Municipalidad de Parral</p>
+        <p>SLEP Los Álamos</p>
         <p style="margin-top: 10px; font-size: 11px;">
             Este reporte fue generado automáticamente por el Panel de Gestión ADP<br>
             Desarrollado por Juan P. Ramírez - Product Manager
@@ -2717,7 +2717,7 @@ function generateADPReport() {
                 <div class="pme-info-grid">
                     <div class="pme-info-item">
                         <span class="pme-info-label">Establecimiento</span>
-                        <span class="pme-info-value">Escuela Juanita Zúñiga CEIA</span>
+                        <span class="pme-info-value">CEIA Juanita Zúñiga Fuentes</span>
                     </div>
                     <div class="pme-info-item">
                         <span class="pme-info-label">Director</span>
