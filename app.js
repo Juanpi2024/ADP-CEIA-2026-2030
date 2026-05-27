@@ -517,7 +517,7 @@ function createMetaCard(meta) {
         <div class="meta-card glass-card" data-id="${meta.id}" data-dimension="${meta.dimension}">
             <div class="meta-header">
                 <div>
-                    <div class="meta-title">${meta.nombre}</div>
+                    <div class="meta-title"><span style="display:inline-block;background:${dimension.color};color:#fff;border-radius:6px;padding:1px 8px;font-size:0.75rem;font-weight:700;margin-right:8px;vertical-align:middle;">Meta ${meta.id.replace('meta-','')}</span>${meta.nombre}</div>
                     <div class="meta-dimension">${dimension.nombre}</div>
                 </div>
                 <span class="meta-status ${meta.estado}">${estado.nombre}</span>
