@@ -10,8 +10,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=20261125b">
-    <link rel="stylesheet" href="asistente.css?v=20261125b">
+    <link rel="stylesheet" href="styles.css?v=20261125c">
+    <link rel="stylesheet" href="asistente.css?v=20261125c">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
@@ -637,6 +637,14 @@
                     </select>
                 </div>
                 <div class="filter-group">
+                    <label for="filterEvidenciaTipo">Tipo:</label>
+                    <select id="filterEvidenciaTipo">
+                        <option value="all">Todos</option>
+                        <option value="acta">Actas de consejo</option>
+                        <option value="informe">Informes y otros</option>
+                    </select>
+                </div>
+                <div class="filter-group">
                     <label for="filterEvidenciaEstado">Estado:</label>
                     <select id="filterEvidenciaEstado">
                         <option value="all">Todos</option>
@@ -1017,10 +1025,10 @@
         </div>
     </section>
 
-    <script src="data.js?v=20261125b"></script>
-    <script src="evidencias.js?v=20261125b"></script>
-    <script src="app.js?v=20261125b"></script>
-    <script src="asistente.js?v=20261125b"></script>
+    <script src="data.js?v=20261125c"></script>
+    <script src="evidencias.js?v=20261125c"></script>
+    <script src="app.js?v=20261125c"></script>
+    <script src="asistente.js?v=20261125c"></script>
 </body>
 
 </html>

@@ -4,7 +4,7 @@
  */
 
 // Versión de datos — al cambiar, la app recarga desde data.js en vez de localStorage
-const DATA_VERSION = '2026-11-25-v1';
+const DATA_VERSION = '2026-11-25-v2';
 
 // Configuración de dimensiones del convenio
 const DIMENSIONES = {
@@ -661,7 +661,7 @@ const CALENDARIO_CEIA = [
     { id: 'ceia-15', fecha: '2026-03-22', titulo: 'Día Mundial del Agua', tipo: 'celebracion', esEvidenciaADP: false },
     { id: 'ceia-16', fecha: '2026-03-23', titulo: 'Inicio Revisión registro de evaluación UTP', tipo: 'evaluacion', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-3' },
 
-    { id: 'ceia-18', fecha: '2026-03-26', titulo: 'Consejo de Profesores: Trabajo Administrativo', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'liderazgo' },
+    { id: 'ceia-18', fecha: '2026-03-26', titulo: 'Consejo de Profesores: Trabajo Administrativo', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'liderazgo', metaRelacionada: 'meta-7' },
     { id: 'ceia-19', fecha: '2026-03-26', titulo: 'Entrega en UTP Planificaciones mes de Abril', tipo: 'entrega', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-7' },
 
     // === ABRIL ===
@@ -688,22 +688,22 @@ const CALENDARIO_CEIA = [
     { id: 'ceia-35', fecha: '2026-05-04', titulo: 'Comienzo del proceso de acompañamiento al aula', tipo: 'administrativo', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-1' },
     { id: 'ceia-36', fecha: '2026-05-04', titulo: 'Inicio 2° Revisión de notas (UTP)', tipo: 'evaluacion', esEvidenciaADP: true, dimensionADP: 'resultados' },
     { id: 'ceia-37', fecha: '2026-05-06', titulo: 'Reunión Equipo de Gestión', tipo: 'administrativo', esEvidenciaADP: true, dimensionADP: 'liderazgo' },
-    { id: 'ceia-38', fecha: '2026-05-07', titulo: 'Consejo General Profesores y Asistentes', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'liderazgo' },
+    { id: 'ceia-38', fecha: '2026-05-07', titulo: 'Consejo General Profesores y Asistentes', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'liderazgo', metaRelacionada: 'meta-9' },
     { id: 'ceia-39', fecha: '2026-05-08', titulo: 'Día de la integridad en comunidades', tipo: 'celebracion', esEvidenciaADP: false },
     { id: 'ceia-40', fecha: '2026-05-11', titulo: 'Celebración Día del Estudiante', tipo: 'celebracion', esEvidenciaADP: false },
     { id: 'ceia-42', fecha: '2026-05-14', titulo: 'Consejo de Profesores: Técnico Pedagógico', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'pedagogica' },
     { id: 'ceia-44', fecha: '2026-05-21', titulo: 'Feriado Legal', tipo: 'feriado', esEvidenciaADP: false },
     { id: 'ceia-nuevo-2', fecha: '2026-05-22', titulo: 'Feriado (Interferido)', tipo: 'feriado', esEvidenciaADP: false },
 
-    { id: 'ceia-46', fecha: '2026-05-28', titulo: 'Consejo de Profesores: Trabajo Administrativo', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'liderazgo' },
+    { id: 'ceia-46', fecha: '2026-05-28', titulo: 'Consejo de Profesores: Trabajo Administrativo', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'liderazgo', metaRelacionada: 'meta-1' },
     { id: 'ceia-47', fecha: '2026-05-25', titulo: 'Inicio Semana de la Seguridad Escolar (PISE)', tipo: 'administrativo', esEvidenciaADP: false },
     { id: 'ceia-48', fecha: '2026-05-28', titulo: 'Simulacro PISE (Día 1)', tipo: 'administrativo', esEvidenciaADP: false },
     { id: 'ceia-49', fecha: '2026-05-29', titulo: 'Simulacro PISE (Día 2)', tipo: 'administrativo', esEvidenciaADP: false },
     { id: 'ceia-50', fecha: '2026-05-28', titulo: 'Entrega en UTP Planificaciones mes de Junio', tipo: 'entrega', esEvidenciaADP: true, dimensionADP: 'pedagogica' },
 
     // === JUNIO ===
-    { id: 'ceia-51', fecha: '2026-06-04', titulo: 'Consejo General Profesores y Asistentes', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'liderazgo' },
-    { id: 'ceia-52', fecha: '2026-06-11', titulo: 'Consejo de Profesores: Técnico Pedagógico', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'pedagogica' },
+    { id: 'ceia-51', fecha: '2026-06-04', titulo: 'Consejo General Profesores y Asistentes', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'liderazgo', metaRelacionada: 'meta-9' },
+    { id: 'ceia-52', fecha: '2026-06-11', titulo: 'Consejo de Profesores: Técnico Pedagógico', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-1' },
     { id: 'ceia-53', fecha: '2026-06-12', titulo: 'Promedios de notas todas las asignaturas 1° Semestre', tipo: 'evaluacion', esEvidenciaADP: true, dimensionADP: 'resultados' },
     { id: 'ceia-nuevo-3', fecha: '2026-06-18', titulo: 'Promedios cerrados 1º Semestre', tipo: 'evaluacion', esEvidenciaADP: true, dimensionADP: 'resultados', metaRelacionada: 'meta-14' },
     { id: 'ceia-54', fecha: '2026-06-12', titulo: '2° Consejo Escolar', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'liderazgo', metaRelacionada: 'meta-9' },
@@ -719,6 +719,15 @@ const CALENDARIO_CEIA = [
 
     // === AGOSTO ===
     { id: 'ceia-ev-violencia-genero', fecha: '2026-08-31', titulo: 'Taller prevención de la violencia de género (agosto)', tipo: 'taller', esEvidenciaADP: true, dimensionADP: 'convivencia', metaRelacionada: 'meta-12' },
+
+    // === ACTAS DE CONSEJO SIN ACTIVIDAD PREVIA EN EL CALENDARIO ===
+    { id: "ceia-ev-acta-2026-04-23", fecha: "2026-04-23", titulo: "Consejo de Profesores (acta 23-04)", tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'liderazgo', metaRelacionada: 'meta-7' },
+    { id: "ceia-ev-acta-2026-07-09", fecha: "2026-07-09", titulo: "Consejo General inicio 2° semestre (acta 09-07)", tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'liderazgo', metaRelacionada: 'meta-7' },
+    { id: "ceia-ev-acta-2026-07-23", fecha: "2026-07-23", titulo: "Capacitación docente: afectividad, sexualidad y género (consejo)", tipo: 'taller', esEvidenciaADP: true, dimensionADP: 'recursos', metaRelacionada: 'meta-5' },
+    { id: "ceia-ev-acta-2026-07-30", fecha: "2026-07-30", titulo: "Consejo: Convivencia Escolar y flujograma de denuncia (acta 30-07)", tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'convivencia', metaRelacionada: 'meta-12' },
+    { id: "ceia-ev-acta-2026-08-06", fecha: "2026-08-06", titulo: "Consejo General: charla FALP y salida INACAP (acta 06-08)", tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'recursos', metaRelacionada: 'meta-6' },
+    { id: "ceia-ev-acta-2026-08-13", fecha: "2026-08-13", titulo: "Segunda Jornada Nacional de Reflexión Pedagógica (adelantada del 14-08)", tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-3' },
+    { id: "ceia-ev-acta-2026-08-20", fecha: "2026-08-20", titulo: "Consejo: encuesta DPD y vinculación UCM / CFT Maule (acta 20-08)", tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'recursos', metaRelacionada: 'meta-6' },
 
     // === OCTUBRE ===
     { id: 'ceia-ev-aniversario', fecha: '2026-10-19', titulo: 'Actividades de Aniversario CEIA (19 al 22 y 26 de octubre)', tipo: 'taller', esEvidenciaADP: true, dimensionADP: 'convivencia', metaRelacionada: 'meta-12' },

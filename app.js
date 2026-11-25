@@ -1798,7 +1798,7 @@ function renderCalendarioCEIA() {
                         ` : ''}
                         ${getEvidenciasDeActividad(act.id).map(ev => `
                             <button type="button" class="activity-evidencia-btn" data-evidencia-open="${ev.id}" data-idx="0">
-                                📷 Ver evidencia (${ev.imagenes.length} imagen${ev.imagenes.length > 1 ? 'es' : ''})${ev.estado === 'reprogramada' ? ' · Reprogramada' : ''}
+                                ${etiquetaBotonEvidencia(ev)}
                             </button>
                         `).join('')}
                     </div>
@@ -2669,7 +2669,7 @@ renderCalendarioCEIA = function () {
                         ` : ''}
                         ${getEvidenciasDeActividad(act.id).map(ev => `
                             <button type="button" class="activity-evidencia-btn" data-evidencia-open="${ev.id}" data-idx="0">
-                                📷 Ver evidencia (${ev.imagenes.length} imagen${ev.imagenes.length > 1 ? 'es' : ''})${ev.estado === 'reprogramada' ? ' · Reprogramada' : ''}
+                                ${etiquetaBotonEvidencia(ev)}
                             </button>
                         `).join('')}
                     </div>
@@ -2884,8 +2884,20 @@ function getEvidenciasADP() {
     return (typeof EVIDENCIAS_ADP !== 'undefined') ? EVIDENCIAS_ADP : [];
 }
 
+function evidenciaTocaMeta(ev, metaId) {
+    return ev.metaId === metaId || (ev.metasRelacionadas || []).includes(metaId);
+}
+
 function getEvidenciasDeMeta(metaId) {
-    return getEvidenciasADP().filter(ev => ev.metaId === metaId);
+    return getEvidenciasADP().filter(ev => evidenciaTocaMeta(ev, metaId));
+}
+
+function etiquetaBotonEvidencia(ev) {
+    const n = ev.imagenes.length;
+    const base = ev.tipoEvidencia === 'acta'
+        ? `📄 Ver acta (${n} página${n > 1 ? 's' : ''})`
+        : `📷 Ver evidencia (${n} imagen${n > 1 ? 'es' : ''})`;
+    return base + (ev.estado === 'reprogramada' ? ' · Reprogramada' : '');
 }
 
 function getEvidenciasDeActividad(actividadId) {
@@ -2913,17 +2925,24 @@ function renderEvidenciaCard(ev, opciones = {}) {
             <div class="evidencia-info">
                 <div class="evidencia-badges">
                     <span class="evidencia-estado" style="--estado-color: ${estado.color}">${estado.nombre}</span>
+                    ${ev.tipoEvidencia === 'acta' ? '<span class="evidencia-tipo-badge">📄 Acta</span>' : ''}
                     ${meta && !opciones.ocultarMeta ? `<span class="evidencia-meta-badge" style="background:${dimension.color}">Meta ${meta.id.replace('meta-', '')} · ${meta.nombre}</span>` : ''}
+                    ${opciones.ocultarMeta && opciones.metaActual && ev.metaId !== opciones.metaActual && meta ? `<span class="evidencia-meta-badge secundaria">Principal: Meta ${meta.id.replace('meta-', '')}</span>` : ''}
                 </div>
                 <h4 class="evidencia-titulo">${ev.titulo}</h4>
                 <p class="evidencia-sub">${ev.tipoDocumento} · ${ev.fechaTexto}</p>
                 <dl class="evidencia-datos">
-                    <div><dt>Indicador</dt><dd>${ev.indicadorDocumento}</dd></div>
+                    <div><dt>${ev.tipoEvidencia === 'acta' ? 'Aporte ADP' : 'Indicador'}</dt><dd>${ev.indicadorDocumento}</dd></div>
                     <div><dt>Participantes</dt><dd>${ev.participantes}</dd></div>
                     <div><dt>Responsable</dt><dd>${ev.responsable}</dd></div>
                     ${ev.firmante ? `<div><dt>Firma</dt><dd>${ev.firmante}</dd></div>` : ''}
                 </dl>
                 <p class="evidencia-resumen">${ev.resumen}</p>
+                ${(ev.metasRelacionadas || []).length ? `<p class="evidencia-relacionadas">También aporta a: ${ev.metasRelacionadas.map(id => {
+                    const m = METAS_INICIALES.find(x => x.id === id);
+                    return m ? `Meta ${id.replace('meta-', '')} (${m.nombre})` : id;
+                }).join(', ')}</p>` : ''}
+                ${ev.pdf ? `<a class="evidencia-pdf" href="${ev.pdf}" target="_blank" rel="noopener">⬇️ Abrir acta en PDF</a>` : ''}
             </div>
         </article>
     `;
@@ -2936,19 +2955,19 @@ function renderSeccionEvidenciasMeta(metaId) {
         <div class="detalle-section">
             <h4>📷 Evidencias cargadas (${evidencias.length})</h4>
             <div class="evidencias-list compact">
-                ${evidencias.map(ev => renderEvidenciaCard(ev, { ocultarMeta: true })).join('')}
+                ${evidencias.map(ev => renderEvidenciaCard(ev, { ocultarMeta: true, metaActual: metaId })).join('')}
             </div>
         </div>
     `;
 }
 
-const filtrosEvidencias = { meta: 'all', estado: 'all' };
+const filtrosEvidencias = { meta: 'all', estado: 'all', tipo: 'all' };
 
 function initEvidencias() {
     const selMeta = document.getElementById('filterEvidenciaMeta');
     const selEstado = document.getElementById('filterEvidenciaEstado');
     if (selMeta) {
-        const metasConEvidencia = [...new Set(getEvidenciasADP().map(ev => ev.metaId))];
+        const metasConEvidencia = [...new Set(getEvidenciasADP().flatMap(ev => [ev.metaId, ...(ev.metasRelacionadas || [])]))];
         METAS_INICIALES.filter(m => metasConEvidencia.includes(m.id)).forEach(m => {
             const opt = document.createElement('option');
             opt.value = m.id;
@@ -2956,6 +2975,10 @@ function initEvidencias() {
             selMeta.appendChild(opt);
         });
         selMeta.addEventListener('change', e => { filtrosEvidencias.meta = e.target.value; renderEvidencias(); });
+    }
+    const selTipo = document.getElementById('filterEvidenciaTipo');
+    if (selTipo) {
+        selTipo.addEventListener('change', e => { filtrosEvidencias.tipo = e.target.value; renderEvidencias(); });
     }
     if (selEstado) {
         selEstado.addEventListener('change', e => { filtrosEvidencias.estado = e.target.value; renderEvidencias(); });
@@ -2979,7 +3002,8 @@ function renderEvidencias() {
     if (!container) return;
 
     const lista = getEvidenciasADP()
-        .filter(ev => filtrosEvidencias.meta === 'all' || ev.metaId === filtrosEvidencias.meta)
+        .filter(ev => filtrosEvidencias.meta === 'all' || evidenciaTocaMeta(ev, filtrosEvidencias.meta))
+        .filter(ev => filtrosEvidencias.tipo === 'all' || (filtrosEvidencias.tipo === 'acta') === (ev.tipoEvidencia === 'acta'))
         .filter(ev => filtrosEvidencias.estado === 'all' || ev.estado === filtrosEvidencias.estado)
         .sort((a, b) => b.fecha.localeCompare(a.fecha));
 
