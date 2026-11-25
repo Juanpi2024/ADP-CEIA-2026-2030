@@ -322,7 +322,7 @@ async function asPreguntarIA(texto) {
 function asSetModo(modo) {
     const el = document.getElementById('asModo');
     if (el) {
-        el.textContent = modo === 'ia' ? 'IA conectada' : 'Modo básico';
+        el.textContent = modo === 'ia' ? '● IA conectada' : '● Modo básico';
         el.className = `as-modo ${modo}`;
     }
 }
@@ -333,7 +333,8 @@ async function asEnviar(texto) {
     let html = '';
     const pensando = document.createElement('div');
     pensando.className = 'as-msg bot as-pensando';
-    pensando.textContent = 'Pensando…';
+    pensando.setAttribute('aria-label', 'Escribiendo');
+    pensando.innerHTML = '<span></span><span></span><span></span>';
 
     if (ASISTENTE_USAR_IA && ASISTENTE_IA_URL) {
         const cont = document.getElementById('asMensajes');
@@ -366,13 +367,16 @@ function initAsistente() {
     let iniciado = false;
 
     const abrir = (abierto) => {
+        panel.hidden = !abierto;
         panel.classList.toggle('active', abierto);
+        btn.classList.toggle('abierto', abierto);
         btn.setAttribute('aria-expanded', abierto ? 'true' : 'false');
         if (abierto && !iniciado) { asAgregarMensaje(asRespAyuda(), 'bot'); iniciado = true; }
         if (abierto) setTimeout(() => input.focus(), 50);
     };
     btn.addEventListener('click', () => abrir(!panel.classList.contains('active')));
     document.getElementById('asCerrar').addEventListener('click', () => abrir(false));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && !panel.hidden) abrir(false); });
     form.addEventListener('submit', e => { e.preventDefault(); const v = input.value; input.value = ''; asEnviar(v); });
     panel.addEventListener('click', e => {
         const chip = e.target.closest('[data-as-pregunta]');
