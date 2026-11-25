@@ -2796,3 +2796,10 @@ body::before {
     #evidencias .filter-group { width: 100%; }
     #evidencias .filter-group select { flex: 1; width: 100%; }
 }
+
+/* Actas de consejo (evidencias tipo acta) */
+.evidencia-tipo-badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:0.72rem; font-weight:600; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.25); }
+.evidencia-meta-badge.secundaria { background: rgba(255,255,255,0.15) !important; }
+.evidencia-relacionadas { margin: 8px 0 0; font-size: 0.8rem; opacity: 0.8; }
+.evidencia-pdf { display:inline-block; margin-top:10px; font-size:0.82rem; font-weight:600; color:#4facfe; text-decoration:none; }
+.evidencia-pdf:hover { text-decoration: underline; }
