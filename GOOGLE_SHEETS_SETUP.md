@@ -62,6 +62,8 @@ function doPost(e) {
         return jsonResponse(saveActividades(data.actividades));
       case 'updateMeta':
         return jsonResponse(updateMeta(data.meta));
+      case 'chat': // Asistente con IA (ver ASISTENTE_IA_SETUP.md)
+        return jsonResponse(chatADP(data));
       case 'saveAll':
         saveMetas(data.metas || []);
         saveHitos(data.hitos || []);

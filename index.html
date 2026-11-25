@@ -97,6 +97,14 @@
                 </svg>
                 <span>Calendario CEIA</span>
             </button>
+            <button class="tab-btn" data-tab="evidencias">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                    <circle cx="8.5" cy="8.5" r="1.5" />
+                    <polyline points="21 15 16 10 5 21" />
+                </svg>
+                <span>Evidencias</span>
+            </button>
         </div>
     </nav>
 
@@ -516,6 +524,7 @@
                         <option value="administrativo">Administrativo</option>
                         <option value="evaluacion">Evaluación</option>
                         <option value="celebracion">Celebración</option>
+                        <option value="taller">Taller</option>
                         <option value="entrega">Entregas</option>
                         <option value="feriado">Feriados</option>
                     </select>
@@ -529,6 +538,11 @@
                         <option value="5">Mayo</option>
                         <option value="6">Junio</option>
                         <option value="7">Julio</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Septiembre</option>
+                        <option value="10">Octubre</option>
+                        <option value="11">Noviembre</option>
+                        <option value="12">Diciembre</option>
                     </select>
                 </div>
                 <div class="filter-group filter-checkbox">
@@ -574,6 +588,10 @@
                     <span>Celebración</span>
                 </div>
                 <div class="legend-item">
+                    <span class="legend-color taller"></span>
+                    <span>Taller</span>
+                </div>
+                <div class="legend-item">
                     <span class="legend-color entrega"></span>
                     <span>Entrega</span>
                 </div>
@@ -591,6 +609,43 @@
             <div class="ceia-list" id="ceiaList">
                 <!-- Las actividades se cargarán dinámicamente -->
             </div>
+        </section>
+        <!-- Pestaña: Evidencias documentales -->
+        <section id="evidencias" class="tab-content">
+            <div class="ceia-header glass-card">
+                <div class="ceia-title">
+                    <h2>📷 Evidencias documentales ADP</h2>
+                    <p class="ceia-subtitle">Informes, planificaciones y oficios escaneados, asociados a cada meta del convenio</p>
+                </div>
+                <div class="ceia-stats">
+                    <div class="ceia-stat">
+                        <span class="stat-number" id="totalEvidenciasDoc">0</span>
+                        <span class="stat-label">Evidencias</span>
+                    </div>
+                    <div class="ceia-stat">
+                        <span class="stat-number" id="totalImagenesDoc">0</span>
+                        <span class="stat-label">Imágenes</span>
+                    </div>
+                </div>
+            </div>
+            <div class="filters-bar glass-card">
+                <div class="filter-group">
+                    <label for="filterEvidenciaMeta">Meta:</label>
+                    <select id="filterEvidenciaMeta">
+                        <option value="all">Todas las metas</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterEvidenciaEstado">Estado:</label>
+                    <select id="filterEvidenciaEstado">
+                        <option value="all">Todos</option>
+                        <option value="realizada">Realizada</option>
+                        <option value="reprogramada">Reprogramada</option>
+                        <option value="planificada">Planificación</option>
+                    </select>
+                </div>
+            </div>
+            <div class="evidencias-list" id="evidenciasList"></div>
         </section>
     </main>
 
@@ -762,6 +817,7 @@
                             <option value="administrativo">Administrativo</option>
                             <option value="evaluacion">Evaluación</option>
                             <option value="celebracion">Celebración</option>
+                            <option value="taller">Taller</option>
                             <option value="entrega">Entrega</option>
                         </select>
                     </div>
@@ -915,8 +971,47 @@
     <!-- Contenedor de Impresión PME (Oculto en pantalla) -->
     <div id="pmePrintContainer" class="print-only"></div>
 
+    <!-- Visor de imágenes de evidencias -->
+    <div class="lightbox-overlay" id="lightboxEvidencia" aria-hidden="true">
+        <button class="lightbox-close" id="lightboxClose" title="Cerrar (Esc)">✕</button>
+        <button class="lightbox-nav prev" id="lightboxPrev" title="Anterior">‹</button>
+        <figure class="lightbox-figure">
+            <img id="lightboxImg" src="" alt="">
+            <figcaption id="lightboxCaption"></figcaption>
+        </figure>
+        <button class="lightbox-nav next" id="lightboxNext" title="Siguiente">›</button>
+    </div>
+
+    <!-- Asistente ADP (chatbot de evidencias) -->
+    <button class="btn-asistente-float" id="btnAsistente" title="Asistente de evidencias ADP" aria-expanded="false" aria-controls="asistentePanel">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        </svg>
+    </button>
+    <section class="asistente-panel glass-card" id="asistentePanel" aria-label="Asistente de evidencias ADP">
+        <header class="as-header">
+            <div>
+                <strong>Asistente de evidencias ADP</strong>
+                <span class="as-modo" id="asModo">Asistente</span>
+            </div>
+            <button type="button" class="as-cerrar" id="asCerrar" title="Cerrar">✕</button>
+        </header>
+        <div class="as-mensajes" id="asMensajes" aria-live="polite"></div>
+        <div class="as-chips">
+            <button type="button" data-as-pregunta="¿Qué evidencias me faltan?">¿Qué me falta?</button>
+            <button type="button" data-as-pregunta="¿Qué evidencias faltan para el semestre 2?">Semestre 2</button>
+            <button type="button" data-as-pregunta="¿Cómo subo una evidencia?">¿Cómo subo una?</button>
+        </div>
+        <form class="as-form" id="asForm" autocomplete="off">
+            <input type="text" id="asInput" placeholder="Ej: ¿a qué meta va una reunión con el CESFAM?" aria-label="Escribe tu pregunta">
+            <button type="submit" title="Enviar">➤</button>
+        </form>
+    </section>
+
     <script src="data.js"></script>
+    <script src="evidencias.js"></script>
     <script src="app.js"></script>
+    <script src="asistente.js"></script>
 </body>
 
 </html>

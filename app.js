@@ -518,7 +518,7 @@ function createMetaCard(meta) {
             <div class="meta-header">
                 <div>
                     <div class="meta-title"><span style="display:inline-block;background:${dimension.color};color:#fff;border-radius:6px;padding:1px 8px;font-size:0.75rem;font-weight:700;margin-right:8px;vertical-align:middle;">Meta ${meta.id.replace('meta-','')}</span>${meta.nombre}</div>
-                    <div class="meta-dimension">${dimension.nombre}</div>
+                    <div class="meta-dimension">${dimension.nombre}${(() => { const n = getEvidenciasDeMeta(meta.id).length; return n ? ` <span class="meta-evidencias-badge" title="Evidencias documentales cargadas">📷 ${n} evidencia${n > 1 ? 's' : ''}</span>` : ''; })()}</div>
                 </div>
                 <span class="meta-status ${meta.estado}">${estado.nombre}</span>
             </div>
@@ -730,6 +730,8 @@ function openDetalleModal(metaId) {
             <p style="white-space: pre-line">${meta.mediosVerificacion}</p>
         </div>
         ` : ''}
+
+        ${renderSeccionEvidenciasMeta(meta.id)}
         
         <div class="detalle-section" style="margin-top: var(--spacing-lg)">
             <h4>Progreso</h4>
@@ -1794,6 +1796,11 @@ function renderCalendarioCEIA() {
                                 📎 Meta ADP: <strong>${nombreMeta}</strong>
                             </div>
                         ` : ''}
+                        ${getEvidenciasDeActividad(act.id).map(ev => `
+                            <button type="button" class="activity-evidencia-btn" data-evidencia-open="${ev.id}" data-idx="0">
+                                📷 Ver evidencia (${ev.imagenes.length} imagen${ev.imagenes.length > 1 ? 'es' : ''})${ev.estado === 'reprogramada' ? ' · Reprogramada' : ''}
+                            </button>
+                        `).join('')}
                     </div>
                     ${act.esEvidenciaADP ? `
                         <div class="activity-evidencia">
@@ -1871,6 +1878,7 @@ function sincronizarConHitos() {
                 'administrativo': 'informe',
                 'evaluacion': 'evaluacion',
                 'celebracion': 'informe',
+                'taller': 'capacitacion',
                 'entrega': 'entrega'
             };
 
@@ -2659,6 +2667,11 @@ renderCalendarioCEIA = function () {
                                 📎 Meta ADP: <strong>${nombreMeta}</strong>
                             </div>
                         ` : ''}
+                        ${getEvidenciasDeActividad(act.id).map(ev => `
+                            <button type="button" class="activity-evidencia-btn" data-evidencia-open="${ev.id}" data-idx="0">
+                                📷 Ver evidencia (${ev.imagenes.length} imagen${ev.imagenes.length > 1 ? 'es' : ''})${ev.estado === 'reprogramada' ? ' · Reprogramada' : ''}
+                            </button>
+                        `).join('')}
                     </div>
                     ${act.esEvidenciaADP ? `
                         <div class="activity-evidencia">
@@ -2862,3 +2875,179 @@ document.addEventListener('DOMContentLoaded', () => {
     initADPPrinting();
 });
 
+
+// ============================================
+// Evidencias documentales (galería + visor)
+// ============================================
+
+function getEvidenciasADP() {
+    return (typeof EVIDENCIAS_ADP !== 'undefined') ? EVIDENCIAS_ADP : [];
+}
+
+function getEvidenciasDeMeta(metaId) {
+    return getEvidenciasADP().filter(ev => ev.metaId === metaId);
+}
+
+function getEvidenciasDeActividad(actividadId) {
+    return getEvidenciasADP().filter(ev => ev.actividadId === actividadId);
+}
+
+function contarImagenes(evidencias) {
+    return evidencias.reduce((total, ev) => total + (ev.imagenes ? ev.imagenes.length : 0), 0);
+}
+
+function renderEvidenciaCard(ev, opciones = {}) {
+    const estado = ESTADOS_EVIDENCIA[ev.estado] || { nombre: ev.estado, color: '#888' };
+    const meta = METAS_INICIALES.find(m => m.id === ev.metaId);
+    const dimension = meta ? DIMENSIONES[meta.dimension] : null;
+
+    return `
+        <article class="evidencia-card glass-card" id="${ev.id}">
+            <div class="evidencia-thumbs">
+                ${ev.imagenes.map((img, idx) => `
+                    <button type="button" class="evidencia-thumb" data-evidencia-open="${ev.id}" data-idx="${idx}" title="Ver imagen">
+                        <img src="${img.src}" alt="${img.descripcion}" loading="lazy">
+                    </button>
+                `).join('')}
+            </div>
+            <div class="evidencia-info">
+                <div class="evidencia-badges">
+                    <span class="evidencia-estado" style="--estado-color: ${estado.color}">${estado.nombre}</span>
+                    ${meta && !opciones.ocultarMeta ? `<span class="evidencia-meta-badge" style="background:${dimension.color}">Meta ${meta.id.replace('meta-', '')} · ${meta.nombre}</span>` : ''}
+                </div>
+                <h4 class="evidencia-titulo">${ev.titulo}</h4>
+                <p class="evidencia-sub">${ev.tipoDocumento} · ${ev.fechaTexto}</p>
+                <dl class="evidencia-datos">
+                    <div><dt>Indicador</dt><dd>${ev.indicadorDocumento}</dd></div>
+                    <div><dt>Participantes</dt><dd>${ev.participantes}</dd></div>
+                    <div><dt>Responsable</dt><dd>${ev.responsable}</dd></div>
+                    ${ev.firmante ? `<div><dt>Firma</dt><dd>${ev.firmante}</dd></div>` : ''}
+                </dl>
+                <p class="evidencia-resumen">${ev.resumen}</p>
+            </div>
+        </article>
+    `;
+}
+
+function renderSeccionEvidenciasMeta(metaId) {
+    const evidencias = getEvidenciasDeMeta(metaId);
+    if (evidencias.length === 0) return '';
+    return `
+        <div class="detalle-section">
+            <h4>📷 Evidencias cargadas (${evidencias.length})</h4>
+            <div class="evidencias-list compact">
+                ${evidencias.map(ev => renderEvidenciaCard(ev, { ocultarMeta: true })).join('')}
+            </div>
+        </div>
+    `;
+}
+
+const filtrosEvidencias = { meta: 'all', estado: 'all' };
+
+function initEvidencias() {
+    const selMeta = document.getElementById('filterEvidenciaMeta');
+    const selEstado = document.getElementById('filterEvidenciaEstado');
+    if (selMeta) {
+        const metasConEvidencia = [...new Set(getEvidenciasADP().map(ev => ev.metaId))];
+        METAS_INICIALES.filter(m => metasConEvidencia.includes(m.id)).forEach(m => {
+            const opt = document.createElement('option');
+            opt.value = m.id;
+            opt.textContent = `Meta ${m.id.replace('meta-', '')}: ${m.nombre}`;
+            selMeta.appendChild(opt);
+        });
+        selMeta.addEventListener('change', e => { filtrosEvidencias.meta = e.target.value; renderEvidencias(); });
+    }
+    if (selEstado) {
+        selEstado.addEventListener('change', e => { filtrosEvidencias.estado = e.target.value; renderEvidencias(); });
+    }
+
+    // Delegación: cualquier miniatura o botón de evidencia abre el visor
+    document.addEventListener('click', e => {
+        const btn = e.target.closest('[data-evidencia-open]');
+        if (!btn) return;
+        e.preventDefault();
+        e.stopPropagation();
+        abrirVisorEvidencia(btn.dataset.evidenciaOpen, parseInt(btn.dataset.idx || '0', 10));
+    }, true);
+
+    initVisorEvidencia();
+    renderEvidencias();
+}
+
+function renderEvidencias() {
+    const container = document.getElementById('evidenciasList');
+    if (!container) return;
+
+    const lista = getEvidenciasADP()
+        .filter(ev => filtrosEvidencias.meta === 'all' || ev.metaId === filtrosEvidencias.meta)
+        .filter(ev => filtrosEvidencias.estado === 'all' || ev.estado === filtrosEvidencias.estado)
+        .sort((a, b) => b.fecha.localeCompare(a.fecha));
+
+    const totalEl = document.getElementById('totalEvidenciasDoc');
+    const imgEl = document.getElementById('totalImagenesDoc');
+    if (totalEl) totalEl.textContent = lista.length;
+    if (imgEl) imgEl.textContent = contarImagenes(lista);
+
+    container.innerHTML = lista.length
+        ? lista.map(ev => renderEvidenciaCard(ev)).join('')
+        : '<div class="empty-state glass-card"><h3>No hay evidencias para estos filtros</h3></div>';
+}
+
+// --- Visor (lightbox) ---
+const visorEvidencia = { evidencia: null, idx: 0 };
+
+function initVisorEvidencia() {
+    const overlay = document.getElementById('lightboxEvidencia');
+    if (!overlay) return;
+    document.getElementById('lightboxClose').addEventListener('click', cerrarVisorEvidencia);
+    document.getElementById('lightboxPrev').addEventListener('click', () => moverVisorEvidencia(-1));
+    document.getElementById('lightboxNext').addEventListener('click', () => moverVisorEvidencia(1));
+    overlay.addEventListener('click', e => { if (e.target === overlay) cerrarVisorEvidencia(); });
+    document.addEventListener('keydown', e => {
+        if (!overlay.classList.contains('active')) return;
+        if (e.key === 'Escape') cerrarVisorEvidencia();
+        if (e.key === 'ArrowLeft') moverVisorEvidencia(-1);
+        if (e.key === 'ArrowRight') moverVisorEvidencia(1);
+    });
+}
+
+function abrirVisorEvidencia(evidenciaId, idx = 0) {
+    const ev = getEvidenciasADP().find(x => x.id === evidenciaId);
+    if (!ev || !ev.imagenes.length) return;
+    visorEvidencia.evidencia = ev;
+    visorEvidencia.idx = idx;
+    actualizarVisorEvidencia();
+    const overlay = document.getElementById('lightboxEvidencia');
+    overlay.classList.add('active');
+    overlay.setAttribute('aria-hidden', 'false');
+}
+
+function cerrarVisorEvidencia() {
+    const overlay = document.getElementById('lightboxEvidencia');
+    overlay.classList.remove('active');
+    overlay.setAttribute('aria-hidden', 'true');
+}
+
+function moverVisorEvidencia(delta) {
+    const ev = visorEvidencia.evidencia;
+    if (!ev) return;
+    const n = ev.imagenes.length;
+    visorEvidencia.idx = (visorEvidencia.idx + delta + n) % n;
+    actualizarVisorEvidencia();
+}
+
+function actualizarVisorEvidencia() {
+    const ev = visorEvidencia.evidencia;
+    const img = ev.imagenes[visorEvidencia.idx];
+    const n = ev.imagenes.length;
+    document.getElementById('lightboxImg').src = img.src;
+    document.getElementById('lightboxImg').alt = img.descripcion;
+    document.getElementById('lightboxCaption').innerHTML =
+        `<strong>${ev.titulo}</strong><br>${img.descripcion}${n > 1 ? ` · ${visorEvidencia.idx + 1} de ${n}` : ''} · <a href="${img.src}" target="_blank" rel="noopener">Abrir original</a>`;
+    document.getElementById('lightboxPrev').style.display = n > 1 ? '' : 'none';
+    document.getElementById('lightboxNext').style.display = n > 1 ? '' : 'none';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(initEvidencias, 350);
+});
