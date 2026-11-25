@@ -10,7 +10,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=20261125b">
+    <link rel="stylesheet" href="asistente.css?v=20261125b">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
@@ -983,35 +984,43 @@
     </div>
 
     <!-- Asistente ADP (chatbot de evidencias) -->
-    <button class="btn-asistente-float" id="btnAsistente" title="Asistente de evidencias ADP" aria-expanded="false" aria-controls="asistentePanel">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-        </svg>
+    <button class="as-launcher" id="btnAsistente" title="Asistente de evidencias ADP" aria-expanded="false" aria-controls="asistentePanel">
+        <span class="as-launcher-icono" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/></svg>
+        </span>
+        <span class="as-launcher-texto">Asistente ADP</span>
     </button>
-    <section class="asistente-panel glass-card" id="asistentePanel" aria-label="Asistente de evidencias ADP">
+    <section class="as-panel" id="asistentePanel" aria-label="Asistente de evidencias ADP" hidden>
         <header class="as-header">
-            <div>
-                <strong>Asistente de evidencias ADP</strong>
-                <span class="as-modo" id="asModo">Asistente</span>
+            <div class="as-avatar" aria-hidden="true">✦</div>
+            <div class="as-titulo">
+                <strong>Asistente de evidencias</strong>
+                <span class="as-modo" id="asModo">Convenio ADP · CEIA</span>
             </div>
-            <button type="button" class="as-cerrar" id="asCerrar" title="Cerrar">✕</button>
+            <button type="button" class="as-cerrar" id="asCerrar" title="Cerrar" aria-label="Cerrar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            </button>
         </header>
         <div class="as-mensajes" id="asMensajes" aria-live="polite"></div>
-        <div class="as-chips">
-            <button type="button" data-as-pregunta="¿Qué evidencias me faltan?">¿Qué me falta?</button>
-            <button type="button" data-as-pregunta="¿Qué evidencias faltan para el semestre 2?">Semestre 2</button>
-            <button type="button" data-as-pregunta="¿Cómo subo una evidencia?">¿Cómo subo una?</button>
+        <div class="as-pie">
+            <div class="as-chips">
+                <button type="button" data-as-pregunta="¿Qué evidencias me faltan?">📋 ¿Qué me falta?</button>
+                <button type="button" data-as-pregunta="¿Qué evidencias faltan para el semestre 2?">🗓️ Semestre 2</button>
+                <button type="button" data-as-pregunta="¿Cómo subo una evidencia?">📤 ¿Cómo subo una?</button>
+            </div>
+            <form class="as-form" id="asForm" autocomplete="off">
+                <input type="text" id="asInput" placeholder="Pregunte o describa una actividad…" aria-label="Escribe tu pregunta">
+                <button type="submit" title="Enviar" aria-label="Enviar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </button>
+            </form>
         </div>
-        <form class="as-form" id="asForm" autocomplete="off">
-            <input type="text" id="asInput" placeholder="Ej: ¿a qué meta va una reunión con el CESFAM?" aria-label="Escribe tu pregunta">
-            <button type="submit" title="Enviar">➤</button>
-        </form>
     </section>
 
-    <script src="data.js"></script>
-    <script src="evidencias.js"></script>
-    <script src="app.js"></script>
-    <script src="asistente.js"></script>
+    <script src="data.js?v=20261125b"></script>
+    <script src="evidencias.js?v=20261125b"></script>
+    <script src="app.js?v=20261125b"></script>
+    <script src="asistente.js?v=20261125b"></script>
 </body>
 
 </html>
