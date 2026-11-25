@@ -4,7 +4,7 @@
  */
 
 // Versión de datos — al cambiar, la app recarga desde data.js en vez de localStorage
-const DATA_VERSION = '2026-05-27-v2';
+const DATA_VERSION = '2026-11-25-v1';
 
 // Configuración de dimensiones del convenio
 const DIMENSIONES = {
@@ -636,7 +636,8 @@ const CATEGORIAS_CEIA = {
     evaluacion: { id: 'evaluacion', nombre: 'Evaluación', color: '#f5576c', icon: '📊' },
     celebracion: { id: 'celebracion', nombre: 'Celebración', color: '#38ef7d', icon: '🎉' },
     entrega: { id: 'entrega', nombre: 'Entrega', color: '#f093fb', icon: '📤' },
-    feriado: { id: 'feriado', nombre: 'Feriado', color: '#888888', icon: '🏖️' }
+    feriado: { id: 'feriado', nombre: 'Feriado', color: '#888888', icon: '🏖️' },
+    taller: { id: 'taller', nombre: 'Taller', color: '#ffb347', icon: '🧩' }
 };
 
 // Calendario Anual CEIA 2026
@@ -652,6 +653,7 @@ const CALENDARIO_CEIA = [
     { id: 'ceia-8', fecha: '2026-03-09', titulo: 'Inicio Evaluación Diagnóstica', tipo: 'evaluacion', esEvidenciaADP: true, dimensionADP: 'resultados' },
     { id: 'ceia-9', fecha: '2026-03-12', titulo: 'Consejo de Profesores: Técnico Pedagógico', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-3' },
     { id: 'ceia-10', fecha: '2026-03-14', titulo: 'Día Contra Del Ciberacoso (Convivencia)', tipo: 'celebracion', esEvidenciaADP: true, dimensionADP: 'convivencia', metaRelacionada: 'meta-12' },
+    { id: 'ceia-ev-rice', fecha: '2026-03-11', titulo: 'Taller socialización Reglamento Interno de Convivencia (RICE)', tipo: 'taller', esEvidenciaADP: true, dimensionADP: 'convivencia', metaRelacionada: 'meta-12' },
     { id: 'ceia-11', fecha: '2026-03-15', titulo: 'Entrega en UTP Planificaciones Anuales', tipo: 'entrega', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-7' },
     { id: 'ceia-12', fecha: '2026-03-17', titulo: '1° Consejo Escolar', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'liderazgo', metaRelacionada: 'meta-9' },
     { id: 'ceia-13', fecha: '2026-03-19', titulo: 'Consejo de Profesores: Trabajo Colaborativo PIE', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'pedagogica', metaRelacionada: 'meta-3' },
@@ -678,6 +680,7 @@ const CALENDARIO_CEIA = [
     { id: 'ceia-30', fecha: '2026-04-27', titulo: 'Día del Carabinero', tipo: 'celebracion', esEvidenciaADP: false },
     { id: 'ceia-31', fecha: '2026-04-29', titulo: 'Día de la Convivencia Escolar', tipo: 'celebracion', esEvidenciaADP: true, dimensionADP: 'convivencia' },
     { id: 'ceia-32', fecha: '2026-04-30', titulo: 'Consejo de Profesores: Trabajo Administrativo', tipo: 'consejo', esEvidenciaADP: true, dimensionADP: 'liderazgo' },
+    { id: 'ceia-ev-charla-pie', fecha: '2026-04-30', titulo: 'Charla "¿Qué es el PIE?" (reprogramada a noviembre, Semana de la Inclusión)', tipo: 'taller', esEvidenciaADP: true, dimensionADP: 'convivencia', metaRelacionada: 'meta-10' },
     { id: 'ceia-33', fecha: '2026-04-30', titulo: 'Entrega en UTP Planificaciones mes de Mayo', tipo: 'entrega', esEvidenciaADP: true, dimensionADP: 'pedagogica' },
 
     // === MAYO ===
@@ -711,7 +714,15 @@ const CALENDARIO_CEIA = [
 
     // === JULIO ===
     { id: 'ceia-59', fecha: '2026-07-03', titulo: 'Fin Periodo de vacaciones de invierno', tipo: 'feriado', esEvidenciaADP: false },
-    { id: 'ceia-60', fecha: '2026-07-06', titulo: 'Inicio de clases 2° Semestre 2026', tipo: 'celebracion', esEvidenciaADP: false }
+    { id: 'ceia-60', fecha: '2026-07-06', titulo: 'Inicio de clases 2° Semestre 2026', tipo: 'celebracion', esEvidenciaADP: false },
+    { id: 'ceia-ev-beneficios', fecha: '2026-07-31', titulo: 'Talleres informativos de beneficios estudiantiles (julio-agosto)', tipo: 'taller', esEvidenciaADP: true, dimensionADP: 'convivencia', metaRelacionada: 'meta-10' },
+
+    // === AGOSTO ===
+    { id: 'ceia-ev-violencia-genero', fecha: '2026-08-31', titulo: 'Taller prevención de la violencia de género (agosto)', tipo: 'taller', esEvidenciaADP: true, dimensionADP: 'convivencia', metaRelacionada: 'meta-12' },
+
+    // === OCTUBRE ===
+    { id: 'ceia-ev-aniversario', fecha: '2026-10-19', titulo: 'Actividades de Aniversario CEIA (19 al 22 y 26 de octubre)', tipo: 'taller', esEvidenciaADP: true, dimensionADP: 'convivencia', metaRelacionada: 'meta-12' },
+    { id: 'ceia-ev-relaciones-sanas', fecha: '2026-10-30', titulo: 'Taller relaciones sanas y libres de violencia (reprogramado a noviembre)', tipo: 'taller', esEvidenciaADP: true, dimensionADP: 'convivencia', metaRelacionada: 'meta-12' }
 ];
 
 // Exportar datos para uso global
