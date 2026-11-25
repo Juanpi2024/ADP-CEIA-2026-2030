@@ -982,9 +982,36 @@
         <button class="lightbox-nav next" id="lightboxNext" title="Siguiente">›</button>
     </div>
 
+    <!-- Asistente ADP (chatbot de evidencias) -->
+    <button class="btn-asistente-float" id="btnAsistente" title="Asistente de evidencias ADP" aria-expanded="false" aria-controls="asistentePanel">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        </svg>
+    </button>
+    <section class="asistente-panel glass-card" id="asistentePanel" aria-label="Asistente de evidencias ADP">
+        <header class="as-header">
+            <div>
+                <strong>Asistente de evidencias ADP</strong>
+                <span class="as-modo" id="asModo">Asistente</span>
+            </div>
+            <button type="button" class="as-cerrar" id="asCerrar" title="Cerrar">✕</button>
+        </header>
+        <div class="as-mensajes" id="asMensajes" aria-live="polite"></div>
+        <div class="as-chips">
+            <button type="button" data-as-pregunta="¿Qué evidencias me faltan?">¿Qué me falta?</button>
+            <button type="button" data-as-pregunta="¿Qué evidencias faltan para el semestre 2?">Semestre 2</button>
+            <button type="button" data-as-pregunta="¿Cómo subo una evidencia?">¿Cómo subo una?</button>
+        </div>
+        <form class="as-form" id="asForm" autocomplete="off">
+            <input type="text" id="asInput" placeholder="Ej: ¿a qué meta va una reunión con el CESFAM?" aria-label="Escribe tu pregunta">
+            <button type="submit" title="Enviar">➤</button>
+        </form>
+    </section>
+
     <script src="data.js"></script>
     <script src="evidencias.js"></script>
     <script src="app.js"></script>
+    <script src="asistente.js"></script>
 </body>
 
 </html>
